@@ -9,6 +9,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>yudao-dependencies</module>
+        <module>yudao-server</module>
+        <module>yudao-framework</module>
     </modules>
 
     <name>${project.artifactId}</name>
