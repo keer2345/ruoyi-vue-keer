@@ -11,6 +11,8 @@
         <module>yudao-dependencies</module>
         <module>yudao-server</module>
         <module>yudao-framework</module>
+        <module>yudao-module-system</module>
+        <module>yudao-module-infra</module>
     </modules>
 
     <name>${project.artifactId}</name>

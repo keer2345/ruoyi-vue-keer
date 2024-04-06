@@ -21,6 +21,13 @@
                 <artifactId>yudao-common</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+            <!-- Web 相关 -->
+            <dependency>
+                <groupId>com.keer.yudaovue</groupId>
+                <artifactId>yudao-spring-boot-starter-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

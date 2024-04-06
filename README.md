@@ -4,10 +4,13 @@
 
 ## Schedule
 
-| Module             | Sub Module   | Percentage | Remark |
-|:-------------------|:-------------|-----------:|:------:|
-| root               |              |       100% |        |
-| yudao-dependencies |              |       100% |        |
-| yudao-server       |              |         5% |        |
-| yudao-framework    | yudao-bom    |         5% |        |
-|                    | yudao-common |         5% |        |
+| Module              | Sub Module              | Percentage | Remark |
+|:--------------------|:------------------------|-----------:|:------:|
+| root                |                         |       100% |        |
+| yudao-dependencies  |                         |       100% |        |
+| yudao-framework     | yudao-bom               |         5% |        |
+|                     | yudao-common            |         5% |        |
+| yudao-module-system | yudao-module-system-api |         5% |        |
+|                     | yudao-module-system-biz |         5% |        |
+|yudao-module-infra||| 
+| yudao-server        |                         |         5% |        |

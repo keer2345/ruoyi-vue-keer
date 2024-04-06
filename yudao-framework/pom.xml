@@ -26,6 +26,7 @@
     <modules>
         <module>yudao-bom</module>
         <module>yudao-common</module>
+        <module>yudao-spring-boot-starter-web</module>
     </modules>
 
 </project>
