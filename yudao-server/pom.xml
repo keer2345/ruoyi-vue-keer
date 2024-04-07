@@ -27,6 +27,11 @@
             <artifactId>yudao-module-system-biz</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>com.keer.yudaovue</groupId>
+            <artifactId>yudao-module-infra-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <!-- spring boot 配置所需依赖 -->
         <dependency>

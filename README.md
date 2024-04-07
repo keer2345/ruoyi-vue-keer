@@ -12,5 +12,6 @@
 |                     | yudao-common            |         5% |        |
 | yudao-module-system | yudao-module-system-api |         5% |        |
 |                     | yudao-module-system-biz |         5% |        |
-|yudao-module-infra||| 
+| yudao-module-infra  | yudao-module-infra-api  |         5% |        |
+|                     | yudao-module-infra-biz  |         5% |        |
 | yudao-server        |                         |         5% |        |

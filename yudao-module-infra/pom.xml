@@ -21,5 +21,6 @@
 
     <modules>
         <module>yudao-module-infra-biz</module>
+        <module>yudao-module-infra-api</module>
     </modules>
 </project>
