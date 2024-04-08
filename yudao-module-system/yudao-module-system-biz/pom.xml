@@ -30,6 +30,12 @@
             <groupId>com.keer.yudaovue</groupId>
             <artifactId>yudao-spring-boot-starter-web</artifactId>
         </dependency>
+
+        <!-- 验证码，一般用于登录使用 -->
+        <dependency>
+            <groupId>com.xingyuv</groupId>
+            <artifactId>spring-boot-starter-captcha-plus</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

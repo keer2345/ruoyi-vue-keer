@@ -12,6 +12,9 @@
 
     <properties>
         <revision>2.0.1</revision>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <dependencyManagement>
@@ -26,6 +29,13 @@
             <dependency>
                 <groupId>com.keer.yudaovue</groupId>
                 <artifactId>yudao-spring-boot-starter-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
+            <!-- 监控相关 -->
+            <dependency>
+                <groupId>com.keer.yudaovue</groupId>
+                <artifactId>yudao-spring-boot-starter-monitor</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

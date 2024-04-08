@@ -5,17 +5,16 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.keer.yudaovue</groupId>
-        <artifactId>yudao-module-system</artifactId>
+        <artifactId>yudao-framework</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <artifactId>yudao-module-system-api</artifactId>
+    <artifactId>yudao-spring-boot-starter-monitor</artifactId>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
-    <description>
-        system 模块 API，暴露给其它模块调用
-    </description>
+    <description>服务监控，提供链路追踪、日志服务、指标收集等等功能</description>
+    <url>https://github.com/YunaiV/ruoyi-vue-pro</url>
 
     <dependencies>
         <dependency>
@@ -23,8 +22,18 @@
             <artifactId>yudao-common</artifactId>
         </dependency>
 
-        <!-- 参数校验 -->
+        <!-- 监控相关 -->
+        <!-- todo -->
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-trace</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.skywalking</groupId>
+            <artifactId>apm-toolkit-logback-1.x</artifactId>
+        </dependency>
         <!-- todo -->
     </dependencies>
+
 
 </project>

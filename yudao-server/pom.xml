@@ -29,7 +29,7 @@
         </dependency>
         <dependency>
             <groupId>com.keer.yudaovue</groupId>
-            <artifactId>yudao-module-infra-api</artifactId>
+            <artifactId>yudao-module-infra-biz</artifactId>
             <version>${revision}</version>
         </dependency>
 

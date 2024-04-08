@@ -1,7 +1,9 @@
+server:
+  port: 48080
+
 spring:
   application:
     name: yudao-server
-  port: 48080
 
   profiles:
     active: local
@@ -9,4 +11,11 @@ spring:
   main:
     allow-circular-references: true # 允许循环依赖，因为项目是三层架构，无法避免这个情况。
 
+# todo
+
+--- #################### 芋道相关配置 ####################
+yudao:
+  info:
+    version: 2.0.1
+    base-package: com.keer.yudaovue
 # todo

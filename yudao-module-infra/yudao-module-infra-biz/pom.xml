@@ -30,6 +30,12 @@
             <artifactId>yudao-module-infra-api</artifactId>
             <version>${revision}</version>
         </dependency>
+
+        <!-- 监控相关 -->
+        <dependency>
+            <groupId>com.keer.yudaovue</groupId>
+            <artifactId>yudao-spring-boot-starter-monitor</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

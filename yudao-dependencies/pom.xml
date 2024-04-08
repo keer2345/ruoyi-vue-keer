@@ -16,6 +16,9 @@
 
     <properties>
         <revision>2.0.1</revision>
+        <java.version>21</java.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
         <flatten-maven-plugin.version>1.5.0</flatten-maven-plugin.version>
         <!-- 统一依赖管理 -->
         <spring.boot.version>3.2.2</spring.boot.version>
@@ -295,11 +298,13 @@
             </dependency>
 
             <!-- 监控相关 -->
+            <!--
             <dependency>
                 <groupId>cn.iocoder.boot</groupId>
                 <artifactId>yudao-spring-boot-starter-monitor</artifactId>
                 <version>${revision}</version>
             </dependency>
+             -->
 
             <dependency>
                 <groupId>org.apache.skywalking</groupId>
@@ -456,6 +461,7 @@
                 <version>${mapstruct.version}</version>
             </dependency>
 
+            <!--
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
@@ -465,6 +471,15 @@
                 <groupId>org.dromara.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool-6.version}</version>
+            </dependency>
+            -->
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-bom</artifactId>
+                <version>${hutool-5.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>
