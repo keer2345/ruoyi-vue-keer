@@ -5,6 +5,8 @@ import com.keer.yudaovue.framework.common.util.servlet.ServletUtils;
 import com.xingyuv.captcha.model.common.ResponseModel;
 import com.xingyuv.captcha.model.vo.CaptchaVO;
 import com.xingyuv.captcha.service.CaptchaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
  * @author keer
  * @date 2024-04-07
  */
+@Tag(name = "管理后台 - 验证码")
 @Slf4j(topic = ">>> CaptchaController")
 @RestController("adminCaptchaController")
 @RequestMapping("/system/captcha")
@@ -21,16 +24,18 @@ public class CaptchaController {
   @Resource private CaptchaService captchaService;
 
   @PostMapping("/get")
+  @Operation(summary = "获取验证码")
   public ResponseModel get(@RequestBody CaptchaVO data, HttpServletRequest request) {
-    log.info("get");
+    log.info("获取验证码");
     assert request.getRemoteHost() != null;
     data.setBrowserInfo(getRemoteId(request));
     return captchaService.get(data);
   }
 
   @PostMapping("/check")
+  @Operation(summary = "校验验证码")
   public ResponseModel check(@RequestBody CaptchaVO data, HttpServletRequest request) {
-    log.info("check");
+    log.info("校验验证码");
     data.setBrowserInfo(getRemoteId(request));
     return captchaService.check(data);
   }
