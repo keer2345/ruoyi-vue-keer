@@ -1,4 +1,4 @@
-package com.keer.yudaovue.module.systemBiz.controller;
+package com.keer.yudaovue.module.systemBiz.controller.admin.captcha;
 
 import cn.hutool.core.util.StrUtil;
 import com.keer.yudaovue.framework.common.util.servlet.ServletUtils;
