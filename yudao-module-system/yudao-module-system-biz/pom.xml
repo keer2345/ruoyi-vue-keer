@@ -31,6 +31,12 @@
             <artifactId>yudao-spring-boot-starter-web</artifactId>
         </dependency>
 
+        <!-- DB 相关 -->
+        <dependency>
+            <groupId>com.keer.yudaovue</groupId>
+            <artifactId>yudao-spring-boot-starter-mybatis</artifactId>
+        </dependency>
+
         <!-- 验证码，一般用于登录使用 -->
         <dependency>
             <groupId>com.xingyuv</groupId>

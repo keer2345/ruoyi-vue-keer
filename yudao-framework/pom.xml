@@ -28,6 +28,7 @@
         <module>yudao-common</module>
         <module>yudao-spring-boot-starter-web</module>
         <module>yudao-spring-boot-starter-monitor</module>
+        <module>yudao-spring-boot-starter-mybatis</module>
     </modules>
 
 </project>

@@ -32,12 +32,21 @@
                 <version>${revision}</version>
             </dependency>
 
+            <!-- DB 相关 -->
+            <dependency>
+                <groupId>com.keer.yudaovue</groupId>
+                <artifactId>yudao-spring-boot-starter-mybatis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+
             <!-- 监控相关 -->
             <dependency>
                 <groupId>com.keer.yudaovue</groupId>
                 <artifactId>yudao-spring-boot-starter-monitor</artifactId>
                 <version>${revision}</version>
             </dependency>
+
+
         </dependencies>
     </dependencyManagement>
 
