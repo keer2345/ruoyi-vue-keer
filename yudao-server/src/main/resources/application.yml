@@ -18,6 +18,9 @@ yudao:
   info:
     version: 2.0.1
     base-package: com.keer.yudaovue
+  web:
+    admin-ui:
+      url: http://dashboard.yudao.iocoder.cn # Admin 管理后台 UI 的地址
 
 --- #################### 接口文档配置 ####################
 springdoc:
