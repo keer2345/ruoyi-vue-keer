@@ -1,0 +1,3 @@
+com.keer.yudaovue.framework.mybatis.datasource.config.YudaoDataSourceAutoConfiguration
+com.keer.yudaovue.framework.mybatis.config.YudaoMybatisAutoConfiguration
+com.keer.yudaovue.framework.mybatis.translate.config.YudaoTranslateAutoConfiguration

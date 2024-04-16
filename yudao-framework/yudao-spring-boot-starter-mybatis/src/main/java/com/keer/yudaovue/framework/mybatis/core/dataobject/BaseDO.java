@@ -1,6 +1,11 @@
 package com.keer.yudaovue.framework.mybatis.core.dataobject;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.fhs.core.trans.vo.TransPojo;
 import lombok.Data;
+import org.apache.ibatis.type.JdbcType;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -18,14 +23,13 @@ import java.time.LocalDateTime;
 @Data
 // @JsonIgnoreProperties(value = "transMap")
 // 由于 Easy-Trans 会添加 transMap 属性，避免 Jackson 在 Spring Cache 反序列化报错
-public abstract class BaseDO implements Serializable // , TransPojo
-{
+public abstract class BaseDO implements Serializable, TransPojo {
   /** 创建时间 */
-  // @TableField(fill = FieldFill.INSERT)
+  @TableField(fill = FieldFill.INSERT)
   private LocalDateTime createTime;
 
   /** 最后更新时间 */
-  // @TableField(fill = FieldFill.INSERT_UPDATE)
+  @TableField(fill = FieldFill.INSERT_UPDATE)
   private LocalDateTime updateTime;
 
   /**
@@ -33,7 +37,7 @@ public abstract class BaseDO implements Serializable // , TransPojo
    *
    * <p>使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
    */
-  // @TableField(fill = FieldFill.INSERT, jdbcType = JdbcType.VARCHAR)
+  @TableField(fill = FieldFill.INSERT, jdbcType = JdbcType.VARCHAR)
   private String creator;
 
   /**
@@ -41,10 +45,9 @@ public abstract class BaseDO implements Serializable // , TransPojo
    *
    * <p>使用 String 类型的原因是，未来可能会存在非数值的情况，留好拓展性。
    */
-  // @TableField(fill = FieldFill.INSERT_UPDATE, jdbcType = JdbcType.VARCHAR)
+  @TableField(fill = FieldFill.INSERT_UPDATE, jdbcType = JdbcType.VARCHAR)
   private String updater;
 
   /** 是否删除 */
-  // @TableLogic
-  private Boolean deleted;
+  @TableLogic private Boolean deleted;
 }

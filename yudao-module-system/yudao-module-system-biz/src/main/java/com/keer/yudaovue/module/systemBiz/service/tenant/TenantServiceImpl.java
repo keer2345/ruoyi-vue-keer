@@ -1,6 +1,8 @@
 package com.keer.yudaovue.module.systemBiz.service.tenant;
 
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.tenant.TenantDO;
+import com.keer.yudaovue.module.systemBiz.dal.mysql.tenant.TenantMapper;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -13,9 +15,11 @@ import org.springframework.validation.annotation.Validated;
 @Service
 @Validated
 public class TenantServiceImpl implements TenantService {
+
+  @Resource private TenantMapper tenantMapper;
+
   @Override
   public TenantDO getTenantByWebsite(String website) {
-
-     return TenantDO.builder().id(123L).name("yudao-keer2").build();
+    return tenantMapper.selectByWebsite(website);
   }
 }

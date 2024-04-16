@@ -33,7 +33,7 @@ public class TenantController {
   @Operation(summary = "使用域名，获取租户信息", description = "登录界面，工具用户的域名，获取租户信息")
   @Parameter(name = "website", description = "域名", required = true, example = "www.keer.com")
   public CommonResult<TenantSimpleRespVO> getTenantByWebsite(@RequestParam("website") String website) {
-    log.info("getTenantByWebsite");
+    log.info("getTenantByWebsite: {}",website);
     TenantDO tenant = tenantService.getTenantByWebsite(website);
     log.info("tenant: {}",tenant.toString());
     return CommonResult.success(BeanUtils.toBean(tenant,TenantSimpleRespVO.class));
