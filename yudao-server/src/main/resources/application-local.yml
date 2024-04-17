@@ -42,7 +42,8 @@ spring:
         master:
           # name: ruoyi-vue-pro
           name: yudao_keer
-          url: jdbc:mysql://120.78.231.219:3309/${spring.datasource.dynamic.datasource.master.name}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true # MySQL Connector/J 8.X 连接的示例
+          driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+          url: jdbc:p6spy:mysql://120.78.231.219:3309/${spring.datasource.dynamic.datasource.master.name}?useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true # MySQL Connector/J 8.X 连接的示例
           #          url: jdbc:mysql://127.0.0.1:3306/${spring.datasource.dynamic.datasource.master.name}?useSSL=false&allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=UTF-8&serverTimezone=CTT # MySQL Connector/J 5.X 连接的示例
           #          url: jdbc:postgresql://127.0.0.1:5432/${spring.datasource.dynamic.datasource.master.name} # PostgreSQL 连接的示例
           #          url: jdbc:oracle:thin:@127.0.0.1:1521:xe # Oracle 连接的示例
@@ -67,3 +68,11 @@ spring:
           password: 123456
   #          username: sa
   #          password: JSm:g(*%lU4ZAkz06cd52KqT3)i1?H7W
+
+  # p6spy
+  decorator:
+    datasource:
+      p6spy:
+        logging: file
+        log-file: spy.log
+        log-format: executionTime:%(executionTime) | sql:%(sqlSingleLine)
