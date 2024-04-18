@@ -22,4 +22,9 @@ public class TenantServiceImpl implements TenantService {
   public TenantDO getTenantByWebsite(String website) {
     return tenantMapper.selectByWebsite(website);
   }
+
+  @Override
+  public TenantDO getTenantByName(String name) {
+    return tenantMapper.selectByName(name);
+  }
 }

@@ -15,4 +15,8 @@ public interface TenantMapper extends BaseMapperX<TenantDO> {
   default TenantDO selectByWebsite(String website) {
     return selectOne(TenantDO::getWebsite, website);
   }
+
+  default TenantDO selectByName(String name) {
+    return selectOne(TenantDO::getName, name);
+  }
 }

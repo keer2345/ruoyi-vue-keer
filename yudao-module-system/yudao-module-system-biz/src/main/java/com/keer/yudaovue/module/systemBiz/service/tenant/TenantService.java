@@ -16,4 +16,12 @@ public interface TenantService {
    * @return
    */
   TenantDO getTenantByWebsite(String website);
+
+  /**
+   * 获得名字对应的租户
+   *
+   * @param name
+   * @return
+   */
+  TenantDO getTenantByName(String name);
 }
