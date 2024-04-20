@@ -15,6 +15,7 @@ import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginReqV
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginRespVO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.user.AdminUserDO;
 import com.keer.yudaovue.module.systemBiz.service.logger.LoginLogService;
+import com.keer.yudaovue.module.systemBiz.service.user.AdminUserService;
 import com.xingyuv.captcha.model.common.ResponseModel;
 import com.xingyuv.captcha.model.vo.CaptchaVO;
 import com.xingyuv.captcha.service.CaptchaService;
@@ -25,7 +26,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import static com.keer.yudaovue.framework.common.exception.util.ServiceExceptionUtil.exception;
-import static com.keer.yudaovue.module.systemApi.enums.ErrorCodeConstants.AUTH_LOGIN_CAPTCHA_CODE_ERROR;
+import static com.keer.yudaovue.module.systemApi.enums.ErrorCodeConstants.*;
 
 /**
  * Auth Service 实现类
@@ -36,6 +37,7 @@ import static com.keer.yudaovue.module.systemApi.enums.ErrorCodeConstants.AUTH_L
 @Service
 @Slf4j(topic = ">>> AdminAuthServiceImpl")
 public class AdminAuthServiceImpl implements AdminAuthService {
+  @Resource private AdminUserService userService;
   @Resource private LoginLogService loginLogService;
   @Resource private Validator validator;
   @Resource private CaptchaService captchaService;
@@ -47,14 +49,20 @@ public class AdminAuthServiceImpl implements AdminAuthService {
   private AdminUserDO authenticate(String username, String password) {
     final LoginLogTypeEnum logTypeEnum = LoginLogTypeEnum.LOGIN_USERNAME;
     // 判断用户是否存在
-    AdminUserDO user = null;
+    AdminUserDO user = userService.getUserByUsername(username);
     if (ObjUtil.isNull(user)) {
       // 记录日志
       createLoginLog(null, username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
       // 抛出异常
-      return null;
+      throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
     }
     // 校验密码
+    if (!userService.isPasswordMatch(password, user.getPassword())) {
+      // 记录日志
+      createLoginLog(user.getId(), username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
+      // 抛出异常
+      throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
+    }
 
     // 校验是否禁用
     if (CommonStatusEnum.isDisable(user.getStatus())) {
@@ -62,6 +70,18 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     }
 
     return user;
+  }
+
+  @Override
+  public AuthLoginRespVO login(AuthLoginReqVO reqVo) {
+    log.info("login( {} )", reqVo.toString());
+    // 校验验证码
+    validateCaptcha(reqVo);
+
+    // 使用账号密码，进行登录
+    AdminUserDO user = authenticate(reqVo.getUsername(), reqVo.getPassword());
+
+    return null;
   }
 
   private void createLoginLog(
@@ -80,18 +100,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     // 更新最后登录时间
     if (ObjUtil.isNotNull(userId)
         && NumberUtil.equals(LoginResultEnum.SUCCESS.getResult(), loginResult.getResult())) {}
-  }
-
-  @Override
-  public AuthLoginRespVO login(AuthLoginReqVO reqVo) {
-    log.info("login( {} )", reqVo.toString());
-    // 校验验证码
-    validateCaptcha(reqVo);
-
-    // 使用账号密码，进行登录
-    AdminUserDO user = authenticate(reqVo.getUsername(), reqVo.getPassword());
-
-    return null;
   }
 
   @VisibleForTesting
