@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjUtil;
 import com.google.common.annotations.VisibleForTesting;
 import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.common.enums.UserTypeEnum;
+import com.keer.yudaovue.framework.common.util.monitor.TracerUtils;
 import com.keer.yudaovue.framework.common.util.servlet.ServletUtils;
 import com.keer.yudaovue.module.systemApi.api.logger.dto.LoginLogCreateReqDTO;
 import com.keer.yudaovue.module.systemApi.enums.logger.LoginLogTypeEnum;
@@ -55,10 +56,10 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
   private void createLoginLog(
       Long userId, String username, LoginLogTypeEnum logTypeEnum, LoginResultEnum loginResult) {
+    // 插入登录日志
     LoginLogCreateReqDTO reqDTO = new LoginLogCreateReqDTO();
-    // todo
     reqDTO.setLogType(logTypeEnum.getType());
-    reqDTO.setTraceId(null);
+    reqDTO.setTraceId(TracerUtils.getTraceId());
     reqDTO.setUserId(userId);
     reqDTO.setUserType(getUserType().getValue());
     reqDTO.setUsername(username);
@@ -91,6 +92,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     // 校验验证码
     // todo
   }
+
   private UserTypeEnum getUserType() {
     return UserTypeEnum.ADMIN;
   }
