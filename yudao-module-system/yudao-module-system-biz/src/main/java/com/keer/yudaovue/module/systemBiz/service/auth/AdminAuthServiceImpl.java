@@ -7,6 +7,7 @@ import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.common.enums.UserTypeEnum;
 import com.keer.yudaovue.framework.common.util.monitor.TracerUtils;
 import com.keer.yudaovue.framework.common.util.servlet.ServletUtils;
+import com.keer.yudaovue.framework.common.util.validation.ValidationUtils;
 import com.keer.yudaovue.module.systemApi.api.logger.dto.LoginLogCreateReqDTO;
 import com.keer.yudaovue.module.systemApi.enums.logger.LoginLogTypeEnum;
 import com.keer.yudaovue.module.systemApi.enums.logger.LoginResultEnum;
@@ -14,10 +15,17 @@ import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginReqV
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginRespVO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.user.AdminUserDO;
 import com.keer.yudaovue.module.systemBiz.service.logger.LoginLogService;
+import com.xingyuv.captcha.model.common.ResponseModel;
+import com.xingyuv.captcha.model.vo.CaptchaVO;
+import com.xingyuv.captcha.service.CaptchaService;
 import jakarta.annotation.Resource;
+import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import static com.keer.yudaovue.framework.common.exception.util.ServiceExceptionUtil.exception;
+import static com.keer.yudaovue.module.systemApi.enums.ErrorCodeConstants.AUTH_LOGIN_CAPTCHA_CODE_ERROR;
 
 /**
  * Auth Service 实现类
@@ -29,6 +37,8 @@ import org.springframework.stereotype.Service;
 @Slf4j(topic = ">>> AdminAuthServiceImpl")
 public class AdminAuthServiceImpl implements AdminAuthService {
   @Resource private LoginLogService loginLogService;
+  @Resource private Validator validator;
+  @Resource private CaptchaService captchaService;
 
   /** 验证码的开关，默认为 true */
   @Value("${yudao.captcha.enable:true}")
@@ -74,6 +84,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
   @Override
   public AuthLoginRespVO login(AuthLoginReqVO reqVo) {
+    log.info("login( {} )", reqVo.toString());
     // 校验验证码
     validateCaptcha(reqVo);
 
@@ -85,12 +96,25 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
   @VisibleForTesting
   void validateCaptcha(AuthLoginReqVO reqVo) {
+    log.info("validateCaptcha( {} )", reqVo);
     // 如果验证码关闭，则不进行校验
-    if (!captchaEnable) {
-      return;
-    }
+    if (!captchaEnable) return;
     // 校验验证码
-    // todo
+    ValidationUtils.validate(validator, reqVo, AuthLoginReqVO.CodeEnableGroup.class);
+    CaptchaVO captchaVO = new CaptchaVO();
+    captchaVO.setCaptchaVerification(reqVo.getCaptchaVerification());
+    ResponseModel response = captchaService.verification(captchaVO);
+    // 验证不通过
+    if (!response.isSuccess()) {
+      // 创建登录失败日志（验证码不正确)
+      log.info("validateCaptcha( {} ) 验证码不通过", reqVo);
+      createLoginLog(
+          null,
+          reqVo.getUsername(),
+          LoginLogTypeEnum.LOGIN_USERNAME,
+          LoginResultEnum.CAPTCHA_CODE_ERROR);
+      throw exception(AUTH_LOGIN_CAPTCHA_CODE_ERROR, response.getRepMsg());
+    }
   }
 
   private UserTypeEnum getUserType() {
