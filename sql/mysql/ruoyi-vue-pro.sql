@@ -4,7 +4,34 @@ GRANT ALL ON ry_keer.* to 'ry_keer'@'%';
 FLUSH PRIVILEGES;
 
 SHOW GRANTS FOR 'ry_keer'@'%';
+-- ----------------------------
+-- Table structure for system_login_log
+-- ----------------------------
+DROP TABLE IF EXISTS `system_login_log`;
+CREATE TABLE `system_login_log`  (
+  `id` bigint NOT NULL AUTO_INCREMENT COMMENT '访问ID',
+  `log_type` bigint NOT NULL COMMENT '日志类型',
+  `trace_id` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '链路追踪编号',
+  `user_id` bigint NOT NULL DEFAULT 0 COMMENT '用户编号',
+  `user_type` tinyint NOT NULL DEFAULT 0 COMMENT '用户类型',
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '用户账号',
+  `result` tinyint NOT NULL COMMENT '登陆结果',
+  `user_ip` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '用户 IP',
+  `user_agent` varchar(512) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '浏览器 UA',
+  `creator` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updater` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3067 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统访问记录';
 
+-- ----------------------------
+-- Records of system_login_log
+-- ----------------------------
+BEGIN;
+COMMIT;
 
 -- ----------------------------
 -- Table structure for system_tenant

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.KeySequence;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.tenant.core.db.TenantBaseDO;
 import lombok.*;
 
@@ -51,8 +52,10 @@ public class AdminUserDO extends TenantBaseDO {
   private Long deptId;
 
   /** 岗位编号数组 */
-  @TableField(typeHandler = JsonLongSetTypeHandler.class)
-  private Set<Long> postIds;
+  // todo
+  // @TableField(typeHandler = JsonLongSetTypeHandler.class)
+  // private Set<Long> postIds;
+  private String postIds;
 
   /** 用户邮箱 */
   private String email;

@@ -78,6 +78,28 @@
         </dependency>
 
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
+        </dependency>
+
+        <dependency>
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
             <scope>provided</scope> <!-- 设置为 provided，主要是 PageParam 使用到 -->

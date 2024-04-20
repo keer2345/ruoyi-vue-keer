@@ -22,6 +22,11 @@
             <artifactId>yudao-common</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.keer.yudaovue</groupId>
+            <artifactId>yudao-spring-boot-starter-web</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- todo -->
 
         <!-- DB 相关 -->
@@ -87,6 +92,12 @@
         <dependency>
             <groupId>p6spy</groupId>
             <artifactId>p6spy</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <scope>provided</scope> <!-- 设置为 provided，只有工具类需要使用到 -->
         </dependency>
     </dependencies>
 </project>

@@ -24,7 +24,11 @@
         </dependency>
 
         <!-- 参数校验 -->
-        <!-- todo -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
 
 </project>
