@@ -1,6 +1,8 @@
 package com.keer.yudaovue.framework.web.config;
 
 import com.keer.yudaovue.framework.common.enums.WebFilterOrderEnum;
+import com.keer.yudaovue.framework.web.apilog.core.service.ApiErrorLogFrameworkService;
+import com.keer.yudaovue.framework.web.core.handler.GlobalExceptionHandler;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Filter;
 import lombok.extern.slf4j.Slf4j;
@@ -59,6 +61,15 @@ public class YudaoWebAutoConfiguration implements WebMvcConfigurer {
             clazz.isAnnotationPresent(RestController.class)
                 && antPathMatcher.match(
                     api.getController(), clazz.getPackage().getName())); // 仅仅匹配 controller 包
+  }
+
+
+  @Bean
+  public GlobalExceptionHandler globalExceptionHandler(
+      // ApiErrorLogFrameworkService apiErrorLogFrameworkService) {
+  ){
+    // return new GlobalExceptionHandler(applicationName, apiErrorLogFrameworkService);
+    return new GlobalExceptionHandler(applicationName);
   }
 
   // ========== Filter 相关 ==========

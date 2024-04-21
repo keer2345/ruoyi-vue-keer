@@ -32,5 +32,12 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
         </dependency>
+
+        <!-- 业务组件 -->
+        <dependency>
+            <groupId>com.keer.yudaovue</groupId>
+            <artifactId>yudao-module-infra-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 </project>

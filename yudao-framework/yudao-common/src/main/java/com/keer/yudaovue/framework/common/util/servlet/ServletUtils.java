@@ -6,6 +6,8 @@ import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Map;
+
 /**
  * 客户端工具类
  *
@@ -57,4 +59,11 @@ public class ServletUtils {
     return JakartaServletUtil.getClientIP(request);
   }
 
+  public static Map<String, String> getParamMap(HttpServletRequest request) {
+    return JakartaServletUtil.getParamMap(request);
+  }
+
+  public static String getBody(HttpServletRequest request) {
+    return JakartaServletUtil.getBody(request);
+  }
 }

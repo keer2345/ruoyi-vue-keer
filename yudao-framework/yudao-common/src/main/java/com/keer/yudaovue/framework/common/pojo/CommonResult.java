@@ -2,6 +2,7 @@ package com.keer.yudaovue.framework.common.pojo;
 
 import com.keer.yudaovue.framework.common.exception.enums.GlobalErrorCodeConstants;
 import lombok.Data;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 
@@ -26,6 +27,14 @@ public class CommonResult<T> implements Serializable {
     result.code = GlobalErrorCodeConstants.SUCCESS.getCode();
     result.data = data;
     result.msg = "";
+    return result;
+  }
+
+  public static <T> CommonResult<T> error(Integer code, String message) {
+    Assert.isTrue(!GlobalErrorCodeConstants.SUCCESS.getCode().equals(code), "code 必须是错误的！");
+    CommonResult<T> result = new CommonResult<>();
+    result.code = code;
+    result.msg = message;
     return result;
   }
 }
