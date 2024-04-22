@@ -1,6 +1,7 @@
 package com.keer.yudaovue.framework.web.apilog.config;
 
 import com.keer.yudaovue.framework.web.apilog.core.service.ApiErrorLogFrameworkService;
+import com.keer.yudaovue.framework.web.apilog.core.service.ApiErrorLogFrameworkServiceImpl;
 import com.keer.yudaovue.framework.web.config.YudaoWebAutoConfiguration;
 import com.keer.yudaovue.module.infraApi.api.logger.dto.ApiErrorLogApi;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
@@ -16,10 +17,7 @@ public class YudaoApiLogAutoConfiguration implements WebMvcConfigurer {
 
   @Bean
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-  public ApiErrorLogFrameworkService apiErrorLogFrameworkService(
-          // ApiErrorLogApi apiErrorLogApi) {
-  ){
-    // return new ApiErrorLogFrameworkServiceImpl(apiErrorLogApi);
-      return null;
+  public ApiErrorLogFrameworkService apiErrorLogFrameworkService(ApiErrorLogApi apiErrorLogApi) {
+    return new ApiErrorLogFrameworkServiceImpl(apiErrorLogApi);
   }
 }

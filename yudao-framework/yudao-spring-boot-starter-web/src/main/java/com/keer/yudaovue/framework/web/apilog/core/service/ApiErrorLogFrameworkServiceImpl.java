@@ -1,5 +1,6 @@
 package com.keer.yudaovue.framework.web.apilog.core.service;
 
+import com.keer.yudaovue.module.infraApi.api.logger.dto.ApiErrorLogApi;
 import com.keer.yudaovue.module.infraApi.api.logger.dto.ApiErrorLogCreateReqDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +15,9 @@ import org.springframework.scheduling.annotation.Async;
  * @date 2024-04-21
  */
 @Slf4j(topic = ">>> ApiErrorLogFrameworkServiceImpl")
-// @RequiredArgsConstructor
+@RequiredArgsConstructor
 public class ApiErrorLogFrameworkServiceImpl implements ApiErrorLogFrameworkService {
+  private final ApiErrorLogApi apiErrorLogApi;
   @Override
   @Async
   public void createApiErrorLog(ApiErrorLogCreateReqDTO reqDTO) {

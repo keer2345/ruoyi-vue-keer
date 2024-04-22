@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
   @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
   private final String applicationName;
 
-  // private final ApiErrorLogFrameworkService apiErrorLogFrameworkService;
+  private final ApiErrorLogFrameworkService apiErrorLogFrameworkService;
 
   /**
    * 处理所有异常，主要是提供给 Filter 使用

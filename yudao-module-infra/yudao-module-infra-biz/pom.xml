@@ -31,6 +31,19 @@
             <version>${revision}</version>
         </dependency>
 
+
+        <!-- 业务组件 -->
+        <dependency>
+            <groupId>com.keer.yudaovue</groupId>
+            <artifactId>yudao-spring-boot-starter-biz-tenant</artifactId>
+        </dependency>
+
+        <!-- Web 相关 -->
+        <dependency>
+            <groupId>com.keer.yudaovue</groupId>
+            <artifactId>yudao-spring-boot-starter-web</artifactId>
+        </dependency>
+
         <!-- 监控相关 -->
         <dependency>
             <groupId>com.keer.yudaovue</groupId>

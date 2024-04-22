@@ -66,10 +66,8 @@ public class YudaoWebAutoConfiguration implements WebMvcConfigurer {
 
   @Bean
   public GlobalExceptionHandler globalExceptionHandler(
-      // ApiErrorLogFrameworkService apiErrorLogFrameworkService) {
-  ){
-    // return new GlobalExceptionHandler(applicationName, apiErrorLogFrameworkService);
-    return new GlobalExceptionHandler(applicationName);
+      ApiErrorLogFrameworkService apiErrorLogFrameworkService) {
+    return new GlobalExceptionHandler(applicationName, apiErrorLogFrameworkService);
   }
 
   // ========== Filter 相关 ==========
