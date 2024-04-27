@@ -53,4 +53,4 @@ application-my.yaml
 /yudao-ui-app/unpackage/
 
 LOG_FILE_IS_UNDEFINED
-LOG_FILE_IS_UNDEFINED*.gz
+LOG_FILE_IS_UNDEFINED*

@@ -50,13 +50,17 @@ public class GlobalExceptionHandler {
    * @param ex
    * @return
    */
-  public CommonResult<?> allExceptionHandler(HttpServletRequest request, Throwable ex) {
+  public CommonResult<?> allExceptionHandler(HttpServletRequest req, Throwable ex) {
     log.info("[allExceptionHandler][ex({})]", ex.getClass().getName(), ex);
-    // if (ex instanceof ServiceException) {
-    //   log.info("ServiceException: {}", ex.getMessage());
-    //   return serviceExceptionHandler((ServiceException) ex);
-    // }
-    return defaultExceptionHandler(request, ex);
+
+    // 插入异常日志
+    // this.createExceptionLog(req, ex);
+
+    if (ex instanceof ServiceException) {
+      log.info("ServiceException: {}", ex.getMessage());
+      return serviceExceptionHandler(req,(ServiceException) ex);
+    }
+    return defaultExceptionHandler(req, ex);
   }
 
   /**
@@ -67,9 +71,11 @@ public class GlobalExceptionHandler {
    * @param ex
    * @return
    */
-  // @ExceptionHandler(value = ServiceException.class)
-  public CommonResult<?> serviceExceptionHandler(ServiceException ex) {
+  @ExceptionHandler(value = ServiceException.class)
+  public CommonResult<?> serviceExceptionHandler(HttpServletRequest req, ServiceException ex) {
     log.info("[serviceExceptionHandler][ex({})]", ex.getClass().getName(), ex);
+    // 插入异常日志
+    this.createExceptionLog(req, ex);
     return CommonResult.error(ex.getCode(), ex.getMessage());
   }
 
@@ -85,6 +91,7 @@ public class GlobalExceptionHandler {
 
     // 插入异常日志
     this.createExceptionLog(req, ex);
+
     // 返回 ERROR CommonResult
     return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMsg());
   }
