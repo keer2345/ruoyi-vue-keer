@@ -14,7 +14,6 @@ import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
  * @author keer
  * @date 2024-04-14
  */
-// todo
 @ConfigurationProperties(prefix = "yudao.web")
 @Validated
 @Data

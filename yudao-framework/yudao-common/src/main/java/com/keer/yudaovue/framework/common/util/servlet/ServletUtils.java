@@ -1,7 +1,13 @@
 package com.keer.yudaovue.framework.common.util.servlet;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
+import com.keer.yudaovue.framework.common.pojo.CommonResult;
+import com.keer.yudaovue.framework.common.util.json.JsonUtils;
+import jakarta.servlet.ServletRequest;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.MediaType;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -15,6 +21,19 @@ import java.util.Map;
  * @date 2024-04-07
  */
 public class ServletUtils {
+
+  /**
+   * 返回 JSON 字符串
+   *
+   * @param response 响应
+   * @param object 对象，会序列化成 JSON 字符串
+   */
+  @SuppressWarnings("deprecation") // 必须使用 APPLICATION_JSON_UTF8_VALUE，否则会乱码
+  public static void writeJSON(HttpServletResponse response, Object object) {
+    String content = JsonUtils.toJsonString(object);
+    JakartaServletUtil.write(response, content, MediaType.APPLICATION_JSON_UTF8_VALUE);
+  }
+
   /**
    * 获得请求
    *
@@ -55,6 +74,10 @@ public class ServletUtils {
     return JakartaServletUtil.getClientIP(request);
   }
 
+  public static boolean isJsonRequest(ServletRequest request) {
+    return StrUtil.startWithIgnoreCase(request.getContentType(), MediaType.APPLICATION_JSON_VALUE);
+  }
+
   public static String getClientIP(HttpServletRequest request) {
     return JakartaServletUtil.getClientIP(request);
   }
@@ -65,5 +88,9 @@ public class ServletUtils {
 
   public static String getBody(HttpServletRequest request) {
     return JakartaServletUtil.getBody(request);
+  }
+
+  public static byte[] getBodyBytes(HttpServletRequest request) {
+    return JakartaServletUtil.getBodyBytes(request);
   }
 }

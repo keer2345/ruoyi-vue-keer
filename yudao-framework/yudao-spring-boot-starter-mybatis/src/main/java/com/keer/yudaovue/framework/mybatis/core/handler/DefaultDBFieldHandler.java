@@ -1,14 +1,12 @@
 package com.keer.yudaovue.framework.mybatis.core.handler;
 
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.keer.yudaovue.framework.mybatis.core.dataobject.BaseDO;
 import com.keer.yudaovue.framework.web.core.util.WebFrameworkUtils;
-import org.apache.ibatis.reflection.MetaObject;
-
 import java.time.LocalDateTime;
 import java.util.Objects;
+import org.apache.ibatis.reflection.MetaObject;
 
 /**
  * 通用参数填充实现类

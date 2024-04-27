@@ -1,6 +1,6 @@
 package com.keer.yudaovue.framework.web.apilog.core.service;
 
-import com.keer.yudaovue.module.infraApi.api.logger.dto.ApiErrorLogApi;
+import com.keer.yudaovue.module.infraApi.api.logger.ApiErrorLogApi;
 import com.keer.yudaovue.module.infraApi.api.logger.dto.ApiErrorLogCreateReqDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,5 +22,6 @@ public class ApiErrorLogFrameworkServiceImpl implements ApiErrorLogFrameworkServ
   @Async
   public void createApiErrorLog(ApiErrorLogCreateReqDTO reqDTO) {
     log.info("[createApiErrorLog][createReqDTO({})]", reqDTO);
+    apiErrorLogApi.createApiErrorLog(reqDTO);
   }
 }

@@ -51,9 +51,11 @@ public class GlobalExceptionHandler {
    * @return
    */
   public CommonResult<?> allExceptionHandler(HttpServletRequest request, Throwable ex) {
-    if (ex instanceof ServiceException) {
-      return serviceExceptionHandler((ServiceException) ex);
-    }
+    log.info("[allExceptionHandler][ex({})]", ex.getClass().getName(), ex);
+    // if (ex instanceof ServiceException) {
+    //   log.info("ServiceException: {}", ex.getMessage());
+    //   return serviceExceptionHandler((ServiceException) ex);
+    // }
     return defaultExceptionHandler(request, ex);
   }
 
@@ -65,7 +67,7 @@ public class GlobalExceptionHandler {
    * @param ex
    * @return
    */
-  @ExceptionHandler(value = ServiceException.class)
+  // @ExceptionHandler(value = ServiceException.class)
   public CommonResult<?> serviceExceptionHandler(ServiceException ex) {
     log.info("[serviceExceptionHandler][ex({})]", ex.getClass().getName(), ex);
     return CommonResult.error(ex.getCode(), ex.getMessage());
@@ -74,21 +76,28 @@ public class GlobalExceptionHandler {
   /** 处理系统异常，兜底处理所有的一切 */
   @ExceptionHandler(value = Exception.class)
   public CommonResult<?> defaultExceptionHandler(HttpServletRequest req, Throwable ex) {
-    log.info("[defaultExceptionHandler][ex({})]", ex.getClass().getName(), ex);
+    log.info("[defaultExceptionHandler][ex({})]", ex);
+    // 情况一：处理表不存在的异常
     // todo
+
+    // 情况二：部分特殊的库的处理
+    // todo
+
     // 插入异常日志
     this.createExceptionLog(req, ex);
     // 返回 ERROR CommonResult
     return CommonResult.error(INTERNAL_SERVER_ERROR.getCode(), INTERNAL_SERVER_ERROR.getMsg());
   }
   private void createExceptionLog(HttpServletRequest req, Throwable e) {
+    log.info("createExceptionLog: 创建异常日志");
     // 插入错误日志
     ApiErrorLogCreateReqDTO errorLog = new ApiErrorLogCreateReqDTO();
     try {
       // 初始化 errorLog
       buildExceptionLog(errorLog, req, e);
+      log.info("errorLog: ( {} )",errorLog);
       // 执行插入 errorLog
-      // apiErrorLogFrameworkService.createApiErrorLog(errorLog);
+      apiErrorLogFrameworkService.createApiErrorLog(errorLog);
     } catch (Throwable th) {
       log.error("[createExceptionLog][url({}) log({}) 发生异常]", req.getRequestURI(),  JsonUtils.toJsonString(errorLog), th);
     }

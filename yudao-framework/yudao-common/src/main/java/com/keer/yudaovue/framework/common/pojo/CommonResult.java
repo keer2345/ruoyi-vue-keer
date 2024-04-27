@@ -1,7 +1,9 @@
 package com.keer.yudaovue.framework.common.pojo;
 
+import com.keer.yudaovue.framework.common.exception.ErrorCode;
 import com.keer.yudaovue.framework.common.exception.enums.GlobalErrorCodeConstants;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -11,6 +13,7 @@ import java.io.Serializable;
  *
  * @param <T>
  */
+@Slf4j(topic = ">>> CommonResult")
 @Data
 public class CommonResult<T> implements Serializable {
   /** 状态码 */
@@ -36,5 +39,9 @@ public class CommonResult<T> implements Serializable {
     result.code = code;
     result.msg = message;
     return result;
+  }
+
+  public static <T> CommonResult<T> error(ErrorCode errorCode) {
+    return error(errorCode.getCode(), errorCode.getMsg());
   }
 }

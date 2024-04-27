@@ -2,18 +2,26 @@ package com.keer.yudaovue.framework.web.config;
 
 import com.keer.yudaovue.framework.common.enums.WebFilterOrderEnum;
 import com.keer.yudaovue.framework.web.apilog.core.service.ApiErrorLogFrameworkService;
+import com.keer.yudaovue.framework.web.core.filter.CacheRequestBodyFilter;
+import com.keer.yudaovue.framework.web.core.filter.DemoFilter;
 import com.keer.yudaovue.framework.web.core.handler.GlobalExceptionHandler;
+import com.keer.yudaovue.framework.web.core.handler.GlobalResponseBodyHandler;
+import com.keer.yudaovue.framework.web.core.util.WebFrameworkUtils;
 import jakarta.annotation.Resource;
 import jakarta.servlet.Filter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.web.client.RestTemplateAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -28,17 +36,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @AutoConfiguration
 @EnableConfigurationProperties(WebProperties.class)
 public class YudaoWebAutoConfiguration implements WebMvcConfigurer {
-
-  // todo
   @Resource private WebProperties webProperties;
 
   /** 应用名 */
   @Value("${spring.application.name}")
   private String applicationName;
-
-  public YudaoWebAutoConfiguration() {
-    log.info("App Name: {}", applicationName);
-  }
 
   @Override
   public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -63,11 +65,23 @@ public class YudaoWebAutoConfiguration implements WebMvcConfigurer {
                     api.getController(), clazz.getPackage().getName())); // 仅仅匹配 controller 包
   }
 
-
   @Bean
   public GlobalExceptionHandler globalExceptionHandler(
       ApiErrorLogFrameworkService apiErrorLogFrameworkService) {
+    log.info("globalExceptionHandler App Name: {}", applicationName);
     return new GlobalExceptionHandler(applicationName, apiErrorLogFrameworkService);
+  }
+
+  @Bean
+  public GlobalResponseBodyHandler globalResponseBodyHandler() {
+    return new GlobalResponseBodyHandler();
+  }
+
+  @Bean
+  @SuppressWarnings("InstantiationOfUtilityClass")
+  public WebFrameworkUtils webFrameworkUtils(WebProperties webProperties) {
+    // 由于 WebFrameworkUtils 需要使用到 webProperties 属性，所以注册为一个 Bean
+    return new WebFrameworkUtils(webProperties);
   }
 
   // ========== Filter 相关 ==========
@@ -88,10 +102,35 @@ public class YudaoWebAutoConfiguration implements WebMvcConfigurer {
     return createFilterBean(new CorsFilter(source), WebFilterOrderEnum.CORS_FILTER);
   }
 
+  /** 创建 RequestBodyCacheFilter Bean，可重复读取请求内容 */
+  @Bean
+  public FilterRegistrationBean<CacheRequestBodyFilter> requestBodyCacheFilter() {
+    return createFilterBean(
+        new CacheRequestBodyFilter(), WebFilterOrderEnum.REQUEST_BODY_CACHE_FILTER);
+  }
+
+  /** 创建 DemoFilter Bean，演示模式 */
+  @Bean
+  @ConditionalOnProperty(value = "yudao.demo", havingValue = "true")
+  public FilterRegistrationBean<DemoFilter> demoFilter() {
+    return createFilterBean(new DemoFilter(), WebFilterOrderEnum.DEMO_FILTER);
+  }
+
   public static <T extends Filter> FilterRegistrationBean<T> createFilterBean(
       T filter, Integer order) {
     FilterRegistrationBean<T> bean = new FilterRegistrationBean<>(filter);
     bean.setOrder(order);
     return bean;
+  }
+
+  /**
+   * 创建 RestTemplate 实例
+   *
+   * @param restTemplateBuilder {@link RestTemplateAutoConfiguration#restTemplateBuilder}
+   */
+  @Bean
+  @ConditionalOnMissingBean(RestTemplate.class)
+  public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+    return restTemplateBuilder.build();
   }
 }

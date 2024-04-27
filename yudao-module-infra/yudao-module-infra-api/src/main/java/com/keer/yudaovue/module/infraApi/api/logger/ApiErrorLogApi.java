@@ -1,5 +1,6 @@
-package com.keer.yudaovue.module.infraApi.api.logger.dto;
+package com.keer.yudaovue.module.infraApi.api.logger;
 
+import com.keer.yudaovue.module.infraApi.api.logger.dto.ApiErrorLogCreateReqDTO;
 import jakarta.validation.Valid;
 
 /**
