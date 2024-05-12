@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.tenant.core.db.TenantBaseDO;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -26,6 +27,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Accessors(chain = true)
 public class AdminUserDO extends TenantBaseDO {
 
   /** 用户ID */

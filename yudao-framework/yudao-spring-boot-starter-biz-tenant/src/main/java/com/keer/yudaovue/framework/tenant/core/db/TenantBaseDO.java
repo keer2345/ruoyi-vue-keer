@@ -3,6 +3,7 @@ package com.keer.yudaovue.framework.tenant.core.db;
 import com.keer.yudaovue.framework.mybatis.core.dataobject.BaseDO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 /**
  * 拓展多租户的 BaseDO 基类

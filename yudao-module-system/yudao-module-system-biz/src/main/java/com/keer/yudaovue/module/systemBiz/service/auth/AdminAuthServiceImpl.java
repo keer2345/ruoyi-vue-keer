@@ -11,10 +11,13 @@ import com.keer.yudaovue.framework.common.util.validation.ValidationUtils;
 import com.keer.yudaovue.module.systemApi.api.logger.dto.LoginLogCreateReqDTO;
 import com.keer.yudaovue.module.systemApi.enums.logger.LoginLogTypeEnum;
 import com.keer.yudaovue.module.systemApi.enums.logger.LoginResultEnum;
+import com.keer.yudaovue.module.systemApi.enums.oauth2.OAuth2ClientConstants;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginReqVO;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginRespVO;
+import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2AccessTokenDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.user.AdminUserDO;
 import com.keer.yudaovue.module.systemBiz.service.logger.LoginLogService;
+import com.keer.yudaovue.module.systemBiz.service.oauth2.OAuth2TokenService;
 import com.keer.yudaovue.module.systemBiz.service.user.AdminUserService;
 import com.xingyuv.captcha.model.common.ResponseModel;
 import com.xingyuv.captcha.model.vo.CaptchaVO;
@@ -37,8 +40,10 @@ import static com.keer.yudaovue.module.systemApi.enums.ErrorCodeConstants.*;
 @Service
 @Slf4j(topic = ">>> AdminAuthServiceImpl")
 public class AdminAuthServiceImpl implements AdminAuthService {
+  // todo
   @Resource private AdminUserService userService;
   @Resource private LoginLogService loginLogService;
+  @Resource private OAuth2TokenService oAuth2TokenService;
   @Resource private Validator validator;
   @Resource private CaptchaService captchaService;
 
@@ -47,6 +52,9 @@ public class AdminAuthServiceImpl implements AdminAuthService {
   private Boolean captchaEnable;
 
   private AdminUserDO authenticate(String username, String password) {
+    log.info("authenticate, username: {}", username);
+    log.info("authenticate, password: {}", password);
+
     final LoginLogTypeEnum logTypeEnum = LoginLogTypeEnum.LOGIN_USERNAME;
     // 判断用户是否存在
     AdminUserDO user = userService.getUserByUsername(username);
@@ -58,15 +66,21 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     }
     // 校验密码
     if (!userService.isPasswordMatch(password, user.getPassword())) {
+      log.info("authenticate: 密码错误");
       // 记录日志
+      log.info("authenticate: 记录日志");
       createLoginLog(user.getId(), username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
+      log.info("authenticate: 记录日志 end");
       // 抛出异常
       throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
     }
 
     // 校验是否禁用
     if (CommonStatusEnum.isDisable(user.getStatus())) {
+      // 记录日志
+      createLoginLog(user.getId(), username, logTypeEnum, LoginResultEnum.USER_DISABLED);
       // 抛出异常
+      throw exception(AUTH_LOGIN_USER_DISABLED);
     }
 
     return user;
@@ -81,7 +95,14 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     // 使用账号密码，进行登录
     AdminUserDO user = authenticate(reqVo.getUsername(), reqVo.getPassword());
 
-    return null;
+    // 如果 socialType 非空，说明需要绑定社交用户
+    if (ObjUtil.isNotNull(reqVo.getSocialType())) {
+      // todo
+    }
+
+    // 创建 Token 令牌，记录登录日志
+    return createTokenAfterLoginSuccess(
+        user.getId(), reqVo.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME);
   }
 
   private void createLoginLog(
@@ -99,7 +120,23 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     loginLogService.createLoginLog(reqDTO);
     // 更新最后登录时间
     if (ObjUtil.isNotNull(userId)
-        && NumberUtil.equals(LoginResultEnum.SUCCESS.getResult(), loginResult.getResult())) {}
+        && NumberUtil.equals(LoginResultEnum.SUCCESS.getResult(), loginResult.getResult())) {
+      log.info("更新最后登录时间");
+      userService.updateUserLogin(userId, ServletUtils.getClientIP());
+      log.info("更新最后登录时间 end");
+    }
+  }
+
+  private AuthLoginRespVO createTokenAfterLoginSuccess(
+      Long userId, String username, LoginLogTypeEnum loginType) {
+    // 插入登陆日志
+    createLoginLog(userId, username, loginType, LoginResultEnum.SUCCESS);
+    // 创建访问令牌
+    OAuth2AccessTokenDO accessTokenDO =
+        oAuth2TokenService.createAccessToken(
+            userId, getUserType().getValue(), OAuth2ClientConstants.CLIENT_ID_DEFAULT, null);
+    // 构建返回结果
+    return null;
   }
 
   @VisibleForTesting

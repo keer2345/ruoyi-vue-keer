@@ -27,6 +27,7 @@ import static com.keer.yudaovue.framework.common.pojo.CommonResult.success;
 @Validated
 @Slf4j(topic = ">>> AuthController")
 public class AuthController {
+  // todo
 
   @Resource
   private AdminAuthService authService;
@@ -35,8 +36,8 @@ public class AuthController {
   @PostMapping("login")
   @Operation(summary = "使用账号密码登录")
   public CommonResult<AuthLoginRespVO> login(@RequestBody @Valid AuthLoginReqVO reqVo) {
-    log.info("login( {} )",reqVo.toString());
+    log.info("login( {} )",reqVo);
     AuthLoginRespVO resp = authService.login(reqVo);
-    return success(null);
+    return success(resp);
   }
 }

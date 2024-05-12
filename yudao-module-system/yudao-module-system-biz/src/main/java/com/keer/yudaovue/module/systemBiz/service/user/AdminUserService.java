@@ -25,4 +25,12 @@ public interface AdminUserService {
    * @return
    */
   boolean isPasswordMatch(String rawPassword, String encodedPassword);
+
+  /**
+   * 更新用户的最后登陆信息
+   *
+   * @param id
+   * @param loginIp
+   */
+  void updateUserLogin(Long id, String loginIp);
 }

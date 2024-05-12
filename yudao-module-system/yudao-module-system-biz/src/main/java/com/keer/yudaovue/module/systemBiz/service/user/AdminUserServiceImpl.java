@@ -6,6 +6,8 @@ import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 /**
  * @author keer
  * @date 2024-04-20
@@ -22,7 +24,13 @@ public class AdminUserServiceImpl implements AdminUserService {
 
   @Override
   public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
-      // todo
+    // todo
     return rawPassword == encodedPassword;
+  }
+
+  @Override
+  public void updateUserLogin(Long id, String loginIp) {
+    userMapper.updateById(
+        new AdminUserDO().setId(id).setLoginIp(loginIp).setLoginDate(LocalDateTime.now()));
   }
 }

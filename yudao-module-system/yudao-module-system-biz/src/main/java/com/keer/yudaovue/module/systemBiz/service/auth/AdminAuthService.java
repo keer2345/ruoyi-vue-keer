@@ -13,6 +13,8 @@ import jakarta.validation.Valid;
  * @date 2024-04-18
  */
 public interface AdminAuthService {
+  // todo
+
   /**
    * 账号登录
    *
