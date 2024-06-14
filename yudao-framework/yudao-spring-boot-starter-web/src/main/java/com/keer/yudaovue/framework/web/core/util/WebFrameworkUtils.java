@@ -62,7 +62,6 @@ public class WebFrameworkUtils {
    * @return 用户编号
    */
   public static Integer getLoginUserType(HttpServletRequest request) {
-    log.info("WebProperties properties: {}", properties);
     if (request == null) {
       return null;
     }

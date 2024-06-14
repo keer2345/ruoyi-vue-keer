@@ -131,17 +131,19 @@
             </dependency>
 
             <!-- Web 相关 -->
-            <!-- <dependency> -->
-            <!--     <groupId>cn.iocoder.boot</groupId> -->
-            <!--     <artifactId>yudao-spring-boot-starter-web</artifactId> -->
-            <!--     <version>${revision}</version> -->
-            <!-- </dependency> -->
+            <!--
+            <dependency>
+                <groupId>cn.iocoder.boot</groupId>
+                <artifactId>yudao-spring-boot-starter-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
 
             <dependency>
                 <groupId>cn.iocoder.boot</groupId>
                 <artifactId>yudao-spring-boot-starter-security</artifactId>
                 <version>${revision}</version>
             </dependency>
+            -->
 
             <dependency>
                 <groupId>cn.iocoder.boot</groupId>

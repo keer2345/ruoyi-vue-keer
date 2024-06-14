@@ -28,4 +28,22 @@ public interface OAuth2TokenService {
    */
   OAuth2AccessTokenDO createAccessToken(
       Long userId, Integer userType, String clientId, List<String> scope);
+
+  /**
+   * 获得访问令牌
+   *
+   * <p>参考 DefaultTokenServices 的 getAccessToken 方法
+   *
+   * @param accessToken
+   * @return
+   */
+  OAuth2AccessTokenDO getAccessToken(String accessToken);
+
+  /**
+   * 校验访问令牌
+   *
+   * @param accessToken
+   * @return
+   */
+  OAuth2AccessTokenDO checkAccessToken(String accessToken);
 }

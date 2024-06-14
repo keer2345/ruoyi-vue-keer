@@ -1,0 +1,4 @@
+#com.keer.yudaovue.framework.security.config.YudaoSecurityAutoConfiguration
+#com.keer.yudaovue.framework.security.config.YudaoWebSecurityConfigurerAdapter
+# com.keer.yudaovue.framework.security.operatelog.config.YudaoOperateLogV2Configuration
+com.keer.yudaovue.framework.security.config.SS2
