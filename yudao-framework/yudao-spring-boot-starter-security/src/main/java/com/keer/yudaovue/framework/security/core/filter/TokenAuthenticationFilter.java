@@ -53,8 +53,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
       } catch (Throwable ex) {
         CommonResult<?> result = globalExceptionHandler.allExceptionHandler(request, ex);
         ServletUtils.writeJSON(response, result);
+        return;
       }
     }
+
+    // 继续过滤链
+    chain.doFilter(request, response);
   }
 
   private LoginUser buildLoginUserByToken(String token, Integer userType) {
