@@ -21,21 +21,9 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "管理后台 - 验证码")
 @Slf4j(topic = ">>> CaptchaController")
 @RestController("adminCaptchaController")
-@RequestMapping( "/system/captcha")
+@RequestMapping("/system/captcha")
 public class CaptchaController {
   @Resource private CaptchaService captchaService;
-
-  @GetMapping("t1")
-  public CommonResult<String> t1(){
-    log.info("t1...");
-    return CommonResult.success("t1");
-  }
-  @PermitAll
-  @GetMapping("t2")
-  public CommonResult<String> t2(){
-    log.info("t2...");
-    return CommonResult.success("t2");
-  }
 
   @PostMapping("/get")
   @Operation(summary = "获取验证码")
