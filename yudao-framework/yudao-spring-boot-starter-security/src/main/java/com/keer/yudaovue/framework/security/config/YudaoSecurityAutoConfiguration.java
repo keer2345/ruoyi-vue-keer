@@ -63,8 +63,13 @@ public class YudaoSecurityAutoConfiguration {
    */
   @Bean
   public PasswordEncoder passwordEncoder() {
-    // return new BCryptPasswordEncoder();
-    return new BCryptPasswordEncoder(securityProperties.getPasswordEncoderLength());
+    int strength = securityProperties.getPasswordEncoderLength();
+
+    if (strength < 4 || strength >= 32) {
+      return new BCryptPasswordEncoder();
+    } else {
+      return new BCryptPasswordEncoder(strength);
+    }
   }
 
   /** Token 认证过滤器 Bean */

@@ -35,4 +35,12 @@ public interface OAuth2ClientService {
       String authorizedGrantType,
       Collection<String> scopes,
       String redirectUri);
+
+  /**
+   * 获得 OAuth2 客户端，从缓存中
+   *
+   * @param clientId 客户端编号
+   * @return OAuth2 客户端
+   */
+  OAuth2ClientDO getOAuth2ClientFromCache(String clientId);
 }

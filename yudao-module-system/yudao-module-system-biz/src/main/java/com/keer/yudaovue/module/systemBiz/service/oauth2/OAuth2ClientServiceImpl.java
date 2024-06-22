@@ -7,7 +7,10 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.common.util.string.StrUtils;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2ClientDO;
+import com.keer.yudaovue.module.systemBiz.dal.mysql.oauth2.OAuth2ClientMapper;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -26,6 +29,8 @@ import static com.keer.yudaovue.module.systemApi.enums.ErrorCodeConstants.*;
 @Validated
 @Slf4j(topic = ">>> OAuth2ClientServiceImpl")
 public class OAuth2ClientServiceImpl implements OAuth2ClientService {
+  @Resource private OAuth2ClientMapper oauth2ClientMapper;
+
   @Override
   public OAuth2ClientDO validOAuthClientFromCache(
       String clientId,
@@ -33,8 +38,10 @@ public class OAuth2ClientServiceImpl implements OAuth2ClientService {
       String authorizedGrantType,
       Collection<String> scopes,
       String redirectUri) {
+
     // 校验客户端存在、且开启
     OAuth2ClientDO client = getSelf().getOAuth2ClientFromCache(clientId);
+
     if (ObjUtil.isNull(client)) {
       throw exception(OAUTH2_CLIENT_NOT_EXISTS);
     }
@@ -60,15 +67,16 @@ public class OAuth2ClientServiceImpl implements OAuth2ClientService {
         && !StrUtils.startWithAny(redirectUri, client.getRedirectUris())) {
       throw exception(OAUTH2_CLIENT_REDIRECT_URI_NOT_MATCH, redirectUri);
     }
-
+log.info("CLIent: {}",client);
     return client;
   }
 
-  // todo
-  private OAuth2ClientDO getOAuth2ClientFromCache(String clientId) {
-    // todo
-    return null;
+  @Override
+  @Cacheable  // todo
+  public OAuth2ClientDO getOAuth2ClientFromCache(String clientId) {
+  return  oauth2ClientMapper.selectByClientId(clientId);
   }
+
 
   /**
    * 获得自身的代理对象，解决 AOP 生效问题

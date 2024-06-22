@@ -32,6 +32,7 @@ public class OAuth2ClientDO extends BaseDO {
     private Long id;
     /**
      * 客户端编号
+     *
      */
     private String clientId;
     /**
