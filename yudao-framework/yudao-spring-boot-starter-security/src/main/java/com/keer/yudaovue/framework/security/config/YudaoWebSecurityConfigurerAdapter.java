@@ -215,10 +215,6 @@ public class YudaoWebSecurityConfigurerAdapter {
       if (!handlerMethod.hasMethodAnnotation(PermitAll.class)) {
         continue;
       }
-      // if (entry.getKey().getPatternsCondition() == null) {
-      //   continue;
-      // }
-      // Set<String> urls = entry.getKey().getPatternsCondition().getPatterns();
 
       Set<String> urls = new HashSet<>();
       if (entry.getKey().getPatternsCondition() != null) {

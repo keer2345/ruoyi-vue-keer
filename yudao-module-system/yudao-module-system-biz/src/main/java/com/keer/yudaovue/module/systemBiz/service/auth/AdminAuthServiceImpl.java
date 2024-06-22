@@ -52,9 +52,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
   private Boolean captchaEnable;
 
   private AdminUserDO authenticate(String username, String password) {
-    log.info("authenticate, username: {}", username);
-    log.info("authenticate, password: {}", password);
-
     final LoginLogTypeEnum logTypeEnum = LoginLogTypeEnum.LOGIN_USERNAME;
     // 判断用户是否存在
     AdminUserDO user = userService.getUserByUsername(username);
@@ -66,11 +63,8 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     }
     // 校验密码
     if (!userService.isPasswordMatch(password, user.getPassword())) {
-      log.info("authenticate: 密码错误");
       // 记录日志
-      log.info("authenticate: 记录日志");
       createLoginLog(user.getId(), username, logTypeEnum, LoginResultEnum.BAD_CREDENTIALS);
-      log.info("authenticate: 记录日志 end");
       // 抛出异常
       throw exception(AUTH_LOGIN_BAD_CREDENTIALS);
     }
@@ -152,7 +146,6 @@ public class AdminAuthServiceImpl implements AdminAuthService {
     // 验证不通过
     if (!response.isSuccess()) {
       // 创建登录失败日志（验证码不正确)
-      log.info("validateCaptcha( {} ) 验证码不通过", reqVo);
       createLoginLog(
           null,
           reqVo.getUsername(),

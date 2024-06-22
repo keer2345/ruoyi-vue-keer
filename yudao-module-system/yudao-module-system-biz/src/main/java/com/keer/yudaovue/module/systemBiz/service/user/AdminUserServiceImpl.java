@@ -4,6 +4,7 @@ import com.keer.yudaovue.module.systemBiz.dal.dataobject.user.AdminUserDO;
 import com.keer.yudaovue.module.systemBiz.dal.mysql.user.AdminUserMapper;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 @Slf4j(topic = ">>> AdminUserServiceImpl")
 public class AdminUserServiceImpl implements AdminUserService {
   @Resource private AdminUserMapper userMapper;
+  @Resource private PasswordEncoder passwordEncoder;
 
   @Override
   public AdminUserDO getUserByUsername(String username) {
@@ -24,8 +26,7 @@ public class AdminUserServiceImpl implements AdminUserService {
 
   @Override
   public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
-    // todo
-    return rawPassword == encodedPassword;
+    return passwordEncoder.matches(rawPassword, encodedPassword);
   }
 
   @Override

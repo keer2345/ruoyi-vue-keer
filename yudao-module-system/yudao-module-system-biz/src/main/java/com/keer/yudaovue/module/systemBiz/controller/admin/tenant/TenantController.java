@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,7 @@ public class TenantController {
 
   // todo
   @GetMapping("get-id-by-name")
+  @PermitAll
   @Operation(summary = "使用租户名，获取租户编号", description = "登录界面，根据用户的租户名，获取租户编号")
   @Parameter(name = "name", description = "租户名", required = true, example = "1024")
   public CommonResult<Long> getTenantIdByName(@RequestParam("name") String name) {
@@ -41,6 +43,7 @@ public class TenantController {
 
   // todo
   @GetMapping("get-by-website")
+  @PermitAll
   @Operation(summary = "使用域名，获取租户信息", description = "登录界面，根据用户的域名，获取租户信息")
   @Parameter(name = "website", description = "域名", required = true, example = "www.keer.com")
   public CommonResult<TenantSimpleRespVO> getTenantByWebsite(

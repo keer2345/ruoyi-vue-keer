@@ -36,6 +36,7 @@ public class CaptchaController {
 
   @PostMapping("/check")
   @Operation(summary = "校验验证码")
+  @PermitAll
   public ResponseModel check(@RequestBody CaptchaVO data, HttpServletRequest request) {
     log.info("校验验证码");
     data.setBrowserInfo(getRemoteId(request));

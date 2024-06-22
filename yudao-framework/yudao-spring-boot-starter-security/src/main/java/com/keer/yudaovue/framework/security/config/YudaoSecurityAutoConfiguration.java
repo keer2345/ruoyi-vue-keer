@@ -10,6 +10,8 @@ import jakarta.annotation.Resource;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
@@ -51,6 +53,18 @@ public class YudaoSecurityAutoConfiguration {
   @Bean
   public AccessDeniedHandler accessDeniedHandler() {
     return new AccessDeniedHandlerImpl();
+  }
+
+  /**
+   * Spring Security 加密器 考虑到安全性，这里采用 BCryptPasswordEncoder 加密器
+   *
+   * @see <a href="http://stackabuse.com/password-encoding-with-spring-security/">Password Encoding
+   *     with Spring Security</a>
+   */
+  @Bean
+  public PasswordEncoder passwordEncoder() {
+    // return new BCryptPasswordEncoder();
+    return new BCryptPasswordEncoder(securityProperties.getPasswordEncoderLength());
   }
 
   /** Token 认证过滤器 Bean */

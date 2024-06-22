@@ -7,6 +7,7 @@ import com.keer.yudaovue.module.systemBiz.service.auth.AdminAuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
+import jakarta.annotation.security.PermitAll;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -29,15 +30,13 @@ import static com.keer.yudaovue.framework.common.pojo.CommonResult.success;
 public class AuthController {
   // todo
 
-  @Resource
-  private AdminAuthService authService;
+  @Resource private AdminAuthService authService;
 
   // todo
   @PostMapping("login")
+  @PermitAll
   @Operation(summary = "使用账号密码登录")
   public CommonResult<AuthLoginRespVO> login(@RequestBody @Valid AuthLoginReqVO reqVo) {
-    log.info("login( {} )",reqVo);
-    AuthLoginRespVO resp = authService.login(reqVo);
-    return success(resp);
+    return success(authService.login(reqVo));
   }
 }
