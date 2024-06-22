@@ -8,10 +8,12 @@ import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2AccessToke
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2ClientDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2RefreshTokenDO;
 import com.keer.yudaovue.module.systemBiz.dal.mysql.oauth2.OAuth2AccessTokenMapper;
+import com.keer.yudaovue.module.systemBiz.dal.mysql.oauth2.OAuth2RefreshTokenMapper;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.keer.yudaovue.framework.common.exception.util.ServiceExceptionUtil.exception0;
@@ -28,6 +30,7 @@ import static com.keer.yudaovue.framework.common.exception.util.ServiceException
 public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 
   @Resource private OAuth2AccessTokenMapper oAuth2AccessTokenMapper;
+  @Resource private OAuth2RefreshTokenMapper oAuth2RefreshTokenMapper;
   @Resource private OAuth2ClientService oauth2ClientService;
 
   @Override
@@ -35,9 +38,24 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
       Long userId, Integer userType, String clientId, List<String> scope) {
     OAuth2ClientDO clientDO = oauth2ClientService.validOAuthClientFormCache(clientId);
     // 创建刷新令牌
-    // OAuth2RefreshTokenDO refreshTokenDO=createOAuth2RefreshToken(userId,userType,clientDO,scope);
+    OAuth2RefreshTokenDO refreshTokenDO =
+        createOAuth2RefreshToken(userId, userType, clientDO, scope);
 
     return null;
+  }
+
+  private OAuth2RefreshTokenDO createOAuth2RefreshToken(
+      Long userId, Integer userType, OAuth2ClientDO clientDO, List<String> scope) {
+    OAuth2RefreshTokenDO refreshToken =
+        new OAuth2RefreshTokenDO()
+            .setRefreshToken(null)
+            .setUserId(userId)
+            .setClientId(clientDO.getClientId())
+            .setScopes(scope)
+            .setExpiresTime(
+                LocalDateTime.now().plusSeconds(clientDO.getRefreshTokenValiditySeconds()));
+    oAuth2RefreshTokenMapper.insert(refreshToken);
+    return refreshToken;
   }
 
   @Override
