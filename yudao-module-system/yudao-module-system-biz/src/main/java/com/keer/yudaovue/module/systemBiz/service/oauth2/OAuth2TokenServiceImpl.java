@@ -1,9 +1,11 @@
 package com.keer.yudaovue.module.systemBiz.service.oauth2;
 
 import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.keer.yudaovue.framework.common.exception.enums.GlobalErrorCodeConstants;
 import com.keer.yudaovue.framework.common.util.date.DateUtils;
+import com.keer.yudaovue.framework.tenant.core.context.TenantContextHolder;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2AccessTokenDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2ClientDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2RefreshTokenDO;
@@ -40,22 +42,53 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     // 创建刷新令牌
     OAuth2RefreshTokenDO refreshTokenDO =
         createOAuth2RefreshToken(userId, userType, clientDO, scope);
+    // 创建访问令牌
+    return createOAuth2AccessToken(refreshTokenDO, clientDO);
+  }
 
-    return null;
+  private OAuth2AccessTokenDO createOAuth2AccessToken(
+      OAuth2RefreshTokenDO refreshTokenDO, OAuth2ClientDO clientDO) {
+    OAuth2AccessTokenDO accessTokenDO =
+        new OAuth2AccessTokenDO()
+            .setAccessToken(generateAccessToken())
+            .setUserId(refreshTokenDO.getUserId())
+            .setUserType(refreshTokenDO.getUserType())
+            .setClientId(clientDO.getClientId())
+            .setScopes(refreshTokenDO.getScopes())
+            .setRefreshToken(refreshTokenDO.getRefreshToken())
+            .setExpiresTime(
+                LocalDateTime.now().plusSeconds(clientDO.getAccessTokenValiditySeconds()));
+    accessTokenDO.setTenantId(
+        TenantContextHolder.getTenantId()); // 手动设置租户编号，避免缓存到 Redis 的时候，无对应的租户编号
+    oAuth2AccessTokenMapper.insert(accessTokenDO);
+
+    // 记录到Redis中
+    // todo
+
+    return accessTokenDO;
   }
 
   private OAuth2RefreshTokenDO createOAuth2RefreshToken(
       Long userId, Integer userType, OAuth2ClientDO clientDO, List<String> scope) {
     OAuth2RefreshTokenDO refreshToken =
         new OAuth2RefreshTokenDO()
-            .setRefreshToken(null)
+            .setRefreshToken(generateRefreshToken())
             .setUserId(userId)
+            .setUserType(userType)
             .setClientId(clientDO.getClientId())
             .setScopes(scope)
             .setExpiresTime(
                 LocalDateTime.now().plusSeconds(clientDO.getRefreshTokenValiditySeconds()));
     oAuth2RefreshTokenMapper.insert(refreshToken);
     return refreshToken;
+  }
+
+  private static String generateAccessToken() {
+    return IdUtil.fastSimpleUUID();
+  }
+
+  private static String generateRefreshToken() {
+    return IdUtil.fastSimpleUUID();
   }
 
   @Override

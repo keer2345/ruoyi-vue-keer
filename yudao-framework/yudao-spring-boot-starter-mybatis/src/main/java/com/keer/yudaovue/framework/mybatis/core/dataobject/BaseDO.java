@@ -3,6 +3,7 @@ package com.keer.yudaovue.framework.mybatis.core.dataobject;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fhs.core.trans.vo.TransPojo;
 import lombok.Data;
 import org.apache.ibatis.type.JdbcType;
@@ -21,8 +22,8 @@ import java.time.LocalDateTime;
  * @date 2024-04-14
  */
 @Data
-// @JsonIgnoreProperties(value = "transMap")
-// 由于 Easy-Trans 会添加 transMap 属性，避免 Jackson 在 Spring Cache 反序列化报错
+@JsonIgnoreProperties(
+    value = "transMap") // 由于 Easy-Trans 会添加 transMap 属性，避免 Jackson 在 Spring Cache 反序列化报错
 public abstract class BaseDO implements Serializable, TransPojo {
   /** 创建时间 */
   @TableField(fill = FieldFill.INSERT)

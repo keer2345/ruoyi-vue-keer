@@ -14,6 +14,7 @@ import com.keer.yudaovue.module.systemApi.enums.logger.LoginResultEnum;
 import com.keer.yudaovue.module.systemApi.enums.oauth2.OAuth2ClientConstants;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginReqVO;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginRespVO;
+import com.keer.yudaovue.module.systemBiz.convert.auth.AuthConvert;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2AccessTokenDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.user.AdminUserDO;
 import com.keer.yudaovue.module.systemBiz.service.logger.LoginLogService;
@@ -130,7 +131,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         oAuth2TokenService.createAccessToken(
             userId, getUserType().getValue(), OAuth2ClientConstants.CLIENT_ID_DEFAULT, null);
     // 构建返回结果
-    return null;
+    return AuthConvert.INSTANCE.convert(accessTokenDO);
   }
 
   @VisibleForTesting
