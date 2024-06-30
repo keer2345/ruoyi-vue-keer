@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.keer.yudaovue.framework.security.core.LoginUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Null;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -17,12 +18,14 @@ import org.springframework.util.StringUtils;
  * @author keer
  * @date 2024-05-17
  */
+@Slf4j(topic = ">>> SecurityFrameworkUtils")
 public class SecurityFrameworkUtils {
   // todo
 
   /** HEADER 认证头 value 的前缀 */
   public static final String AUTHORIZATION_BEARER = "Bearer";
 
+  private SecurityFrameworkUtils() {}
   /**
    * 获得当前用户的编号，从上下文中
    *
@@ -72,12 +75,16 @@ public class SecurityFrameworkUtils {
    */
   public static String obtainAuthorization(
       HttpServletRequest request, String headerName, String parameterName) {
+    log.info("obtainAuthorization");
     // 1. 获得 Token。优先级：Header > Parameter
     String token = request.getHeader(headerName);
+    log.info("obtainAuthorization getHeader: {}",token);
     if (StrUtil.isEmpty(token)) {
       token = request.getParameter(parameterName);
+      log.info("obtainAuthorization getParameter: {}",token);
     }
     if (!StringUtils.hasText(token)) {
+      log.info("obtainAuthorization: empty token");
       return null;
     }
     // 2. 去除 Token 中带的 Bearer

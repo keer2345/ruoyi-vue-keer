@@ -15,7 +15,6 @@ import java.util.Map;
  * @date 2024-05-17
  */
 @Data
-@Accessors(chain = true)
 public class LoginUser {
 
   /** 用户编号 */

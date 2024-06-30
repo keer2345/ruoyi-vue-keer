@@ -1,15 +1,21 @@
 package com.keer.yudaovue.framework.security.config;
 
 import com.keer.yudaovue.framework.security.core.aop.PreAuthenticatedAspect;
+import com.keer.yudaovue.framework.security.core.context.TransmittableThreadLocalSecurityContextHolderStrategy;
 import com.keer.yudaovue.framework.security.core.filter.TokenAuthenticationFilter;
 import com.keer.yudaovue.framework.security.core.handler.AccessDeniedHandlerImpl;
 import com.keer.yudaovue.framework.security.core.handler.AuthenticationEntryPointImpl;
+import com.keer.yudaovue.framework.security.core.service.SecurityFrameworkService;
+import com.keer.yudaovue.framework.security.core.service.SecurityFrameworkServiceImpl;
 import com.keer.yudaovue.framework.web.core.handler.GlobalExceptionHandler;
 import com.keer.yudaovue.module.systemApi.api.OAuth2TokenApi;
+import com.keer.yudaovue.module.systemApi.api.permission.PermissionApi;
 import jakarta.annotation.Resource;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -30,7 +36,7 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @AutoConfiguration
 @EnableConfigurationProperties(SecurityProperties.class)
 public class YudaoSecurityAutoConfiguration {
-  // todo
+  // done
   @Resource private SecurityProperties securityProperties;
 
   /**
@@ -78,5 +84,24 @@ public class YudaoSecurityAutoConfiguration {
       GlobalExceptionHandler globalExceptionHandler, OAuth2TokenApi oauth2TokenApi) {
     return new TokenAuthenticationFilter(
         securityProperties, globalExceptionHandler, oauth2TokenApi);
+  }
+
+  @Bean("ss") // 使用 Spring Security 的缩写，方便使用
+  public SecurityFrameworkService securityFrameworkService(PermissionApi permissionApi) {
+    return new SecurityFrameworkServiceImpl(permissionApi);
+  }
+
+  /**
+   * 声明调用 {@link SecurityContextHolder#setStrategyName(String)} 方法， 设置使用 {@link
+   * TransmittableThreadLocalSecurityContextHolderStrategy} 作为 Security 的上下文策略
+   */
+  @Bean
+  public MethodInvokingFactoryBean securityContextHolderMethodInvokingFactoryBean() {
+    MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+    methodInvokingFactoryBean.setTargetClass(SecurityContextHolder.class);
+    methodInvokingFactoryBean.setTargetMethod("setStrategyName");
+    methodInvokingFactoryBean.setArguments(
+        TransmittableThreadLocalSecurityContextHolderStrategy.class.getName());
+    return methodInvokingFactoryBean;
   }
 }

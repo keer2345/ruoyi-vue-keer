@@ -9,10 +9,11 @@ import com.keer.yudaovue.framework.security.core.filter.TokenAuthenticationFilte
 import com.keer.yudaovue.framework.web.config.WebProperties;
 import jakarta.annotation.Resource;
 import jakarta.annotation.security.PermitAll;
+
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.ApplicationContext;
@@ -39,6 +40,8 @@ import org.springframework.web.util.pattern.PathPattern;
 /**
  * 参考：
  *
+ * <p>https://github.com/YunaiV/ruoyi-vue-pro/blob/master-jdk17/yudao-framework/yudao-spring-boot-starter-security/src/main/java/cn/iocoder/yudao/framework/security/config/YudaoWebSecurityConfigurerAdapter.java
+ *
  * <p>https://github.com/DryRun03/JWT3/
  *
  * <p>https://blog.csdn.net/qq_55754838/article/details/134620470
@@ -49,8 +52,6 @@ import org.springframework.web.util.pattern.PathPattern;
  *
  * <p>https://github.com/traccar/traccar/blob/bc65eb120807b7c899d3fd95fbb6684934bfa3ef/src/main/java/org/traccar/api/security/SecurityRequestFilter.java#L110
  *
- * <p>https://github.com/YunaiV/ruoyi-vue-pro/blob/master-jdk17/yudao-framework/yudao-spring-boot-starter-security/src/main/java/cn/iocoder/yudao/framework/security/config/YudaoWebSecurityConfigurerAdapter.java
- *
  * @author keer
  * @date 2024-06-02
  */
@@ -58,7 +59,10 @@ import org.springframework.web.util.pattern.PathPattern;
 @AutoConfiguration
 @EnableMethodSecurity(securedEnabled = true)
 public class YudaoWebSecurityConfigurerAdapter {
+  // todo
+
   @Resource private WebProperties webProperties;
+
   @Resource private SecurityProperties securityProperties;
 
   /** 认证失败处理类 Bean */
@@ -75,6 +79,7 @@ public class YudaoWebSecurityConfigurerAdapter {
    *
    * @see #filterChain(HttpSecurity)
    */
+  // todo
   // @Resource private List<AuthorizeRequestsCustomizer> authorizeRequestsCustomizers;
 
   @Resource private ApplicationContext applicationContext;
@@ -108,7 +113,6 @@ public class YudaoWebSecurityConfigurerAdapter {
    */
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    log.info("vsvs...vsvs");
     // 登出
     http
         // 开启跨域
@@ -128,7 +132,6 @@ public class YudaoWebSecurityConfigurerAdapter {
 
     // 获得 @PermitAll 带来的 URL 列表，免登录
     Multimap<HttpMethod, String> permitAllUrls = getPermitAllUrlsFromAnnotations();
-
     // 设置每个请求的权限
     http
         // ①：全局共享规则

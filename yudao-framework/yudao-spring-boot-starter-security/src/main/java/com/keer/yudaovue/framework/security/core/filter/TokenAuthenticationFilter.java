@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,6 +30,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  * @author keer
  * @date 2024-06-05
  */
+@Slf4j(topic = ">>> TokenAuthenticationFilter")
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
   private final SecurityProperties securityProperties;
@@ -39,6 +41,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
   protected void doFilterInternal(
       HttpServletRequest request, HttpServletResponse response, FilterChain chain)
       throws ServletException, IOException {
+
+    log.info("doFilterInternal");
+
     String token =
         SecurityFrameworkUtils.obtainAuthorization(
             request, securityProperties.getTokenHeader(), securityProperties.getTokenParameter());
