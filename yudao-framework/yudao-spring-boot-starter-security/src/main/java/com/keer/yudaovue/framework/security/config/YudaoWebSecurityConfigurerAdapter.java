@@ -235,7 +235,9 @@ public class YudaoWebSecurityConfigurerAdapter {
 
       // 特殊：使用 @RequestMapping 注解，并且未写 method 属性，此时认为都需要免登录
       Set<RequestMethod> methods = entry.getKey().getMethodsCondition().getMethods();
-      if (CollUtil.isEmpty(methods)) { //
+      log.info("method 1 : {}",methods);
+      if (CollUtil.isEmpty(methods)) {
+        log.info("method 2 : {}",methods);
         result.putAll(HttpMethod.GET, urls);
         result.putAll(HttpMethod.POST, urls);
         result.putAll(HttpMethod.PUT, urls);

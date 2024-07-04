@@ -1,6 +1,10 @@
 package com.keer.yudaovue.framework.common.util.object;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjUtil;
+import com.keer.yudaovue.framework.common.util.ollection.CollectionUtils;
+
+import java.util.List;
 
 /**
  * Bean 工具类
@@ -13,10 +17,16 @@ import cn.hutool.core.bean.BeanUtil;
  * @date 2024-04-14
  */
 public class BeanUtils {
+  // todo
 
   public static <T> T toBean(Object source, Class<T> targetClass) {
     return BeanUtil.toBean(source, targetClass);
   }
 
-  // todo
+  public static <S, T> List<T> toBean(List<S> source, Class<T> targetType) {
+    if (ObjUtil.isNull(source)) {
+      return null;
+    }
+    return CollectionUtils.convertList(source, s -> toBean(s, targetType));
+  }
 }

@@ -12,6 +12,7 @@ import com.keer.yudaovue.module.systemBiz.dal.dataobject.oauth2.OAuth2RefreshTok
 import com.keer.yudaovue.module.systemBiz.dal.mysql.oauth2.OAuth2AccessTokenMapper;
 import com.keer.yudaovue.module.systemBiz.dal.mysql.oauth2.OAuth2RefreshTokenMapper;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
@@ -28,6 +29,7 @@ import static com.keer.yudaovue.framework.common.exception.util.ServiceException
  */
 
 /** OAuth2.0 Token Service 实现类 */
+@Slf4j(topic = ">>> OAuth2TokenServiceImpl")
 @Service
 public class OAuth2TokenServiceImpl implements OAuth2TokenService {
 
