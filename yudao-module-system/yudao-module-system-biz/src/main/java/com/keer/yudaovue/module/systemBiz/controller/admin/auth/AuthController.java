@@ -1,11 +1,15 @@
 package com.keer.yudaovue.module.systemBiz.controller.admin.auth;
 
+import cn.hutool.core.collection.CollUtil;
+import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.common.pojo.CommonResult;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginReqVO;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginRespVO;
+import com.keer.yudaovue.module.systemBiz.dal.dataobject.permission.RoleDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.user.AdminUserDO;
 import com.keer.yudaovue.module.systemBiz.service.auth.AdminAuthService;
 import com.keer.yudaovue.module.systemBiz.service.permission.PermissionService;
+import com.keer.yudaovue.module.systemBiz.service.permission.RoleService;
 import com.keer.yudaovue.module.systemBiz.service.user.AdminUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 import static com.keer.yudaovue.framework.common.pojo.CommonResult.success;
@@ -35,7 +40,8 @@ public class AuthController {
 
   @Resource private AdminAuthService authService;
   @Resource private AdminUserService userService;
-  @Resource private PermissionService permissionService ;
+  @Resource private PermissionService permissionService;
+  @Resource private RoleService roleService;
 
   // todo
   @PostMapping("login")
@@ -56,6 +62,12 @@ public class AuthController {
     }
 
     // 1.2 获得角色列表
-    Set<Long> roleIds=permissionService.getUserRoleIdListByUserId(getLoginUserId());
+    Set<Long> roleIds = permissionService.getUserRoleIdListByUserId(getLoginUserId());
+    if (CollUtil.isEmpty(roleIds)) {
+      // todo
+    }
+
+    List<RoleDO> roles = roleService.getRoleList(roleIds);
+    roles.removeIf(role -> !CommonStatusEnum.ENABLE.getStatus().equals(role.getStatus()));
   }
 }
