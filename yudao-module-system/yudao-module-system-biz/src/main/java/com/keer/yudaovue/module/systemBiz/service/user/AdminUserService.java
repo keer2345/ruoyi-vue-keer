@@ -33,4 +33,12 @@ public interface AdminUserService {
    * @param loginIp
    */
   void updateUserLogin(Long id, String loginIp);
+
+  /**
+   * 通过用户 ID 查询用户
+   *
+   * @param id
+   * @return
+   */
+  AdminUserDO getUser(Long id);
 }

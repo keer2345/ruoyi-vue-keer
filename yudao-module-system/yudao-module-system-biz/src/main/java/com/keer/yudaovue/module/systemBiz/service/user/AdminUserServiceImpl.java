@@ -34,4 +34,9 @@ public class AdminUserServiceImpl implements AdminUserService {
     userMapper.updateById(
         new AdminUserDO().setId(id).setLoginIp(loginIp).setLoginDate(LocalDateTime.now()));
   }
+
+  @Override
+  public AdminUserDO getUser(Long id) {
+    return userMapper.selectById(id);
+  }
 }

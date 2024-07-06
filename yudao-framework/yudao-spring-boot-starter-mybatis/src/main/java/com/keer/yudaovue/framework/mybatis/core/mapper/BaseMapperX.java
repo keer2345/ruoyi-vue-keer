@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.github.yulichang.base.MPJBaseMapper;
 
+import java.util.List;
+
 /**
  * 在 MyBatis Plus 的 BaseMapper 的基础上拓展，提供更多的能力
  *
@@ -18,5 +20,9 @@ import com.github.yulichang.base.MPJBaseMapper;
 public interface BaseMapperX<T> extends MPJBaseMapper<T> {
   default T selectOne(SFunction<T, ?> field, Object value) {
     return selectOne(new LambdaQueryWrapper<T>().eq(field, value));
+  }
+
+  default List<T> selectList(SFunction<T, ?> field, Object value) {
+    return selectList(new LambdaQueryWrapper<T>().eq(field, value));
   }
 }

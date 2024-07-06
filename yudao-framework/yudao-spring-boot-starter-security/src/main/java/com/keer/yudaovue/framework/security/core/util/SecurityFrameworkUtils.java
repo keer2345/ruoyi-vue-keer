@@ -26,6 +26,7 @@ public class SecurityFrameworkUtils {
   public static final String AUTHORIZATION_BEARER = "Bearer";
 
   private SecurityFrameworkUtils() {}
+
   /**
    * 获得当前用户的编号，从上下文中
    *
@@ -70,7 +71,8 @@ public class SecurityFrameworkUtils {
    * 从请求中，获得认证 Token
    *
    * @param request
-   * @param o
+   * @param headerName
+   * @param parameterName
    * @return
    */
   public static String obtainAuthorization(
@@ -78,10 +80,10 @@ public class SecurityFrameworkUtils {
     log.info("obtainAuthorization");
     // 1. 获得 Token。优先级：Header > Parameter
     String token = request.getHeader(headerName);
-    log.info("obtainAuthorization getHeader: {}",token);
+    log.info("obtainAuthorization getHeader: {}", token);
     if (StrUtil.isEmpty(token)) {
       token = request.getParameter(parameterName);
-      log.info("obtainAuthorization getParameter: {}",token);
+      log.info("obtainAuthorization getParameter: {}", token);
     }
     if (!StringUtils.hasText(token)) {
       log.info("obtainAuthorization: empty token");
