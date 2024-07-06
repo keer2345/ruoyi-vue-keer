@@ -1,5 +1,6 @@
 package com.keer.yudaovue.module.systemBiz.service.permission;
 
+import java.util.Collection;
 import java.util.Set;
 
 /**
@@ -19,4 +20,12 @@ public interface PermissionService {
    * @return
    */
   Set<Long> getUserRoleIdListByUserId(Long id);
+
+  /**
+   * 获得角色们拥有的菜单编号集合
+   *
+   * @param longs
+   * @return
+   */
+  Set<Long> getRoleMenuListByRoleId(Collection<Long> roleIds);
 }
