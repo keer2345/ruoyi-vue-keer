@@ -5,6 +5,8 @@ import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.common.pojo.CommonResult;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginReqVO;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginRespVO;
+import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthPermissionInfoRespVO;
+import com.keer.yudaovue.module.systemBiz.convert.auth.AuthConvert;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.permission.MenuDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.permission.RoleDO;
 import com.keer.yudaovue.module.systemBiz.dal.dataobject.user.AdminUserDO;
@@ -22,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -57,7 +61,7 @@ public class AuthController {
 
   @GetMapping("get-permission-info")
   @Operation(summary = "获取登录用户的权限信息")
-  public CommonResult<String> getPermissionInfo() {
+  public CommonResult<AuthPermissionInfoRespVO> getPermissionInfo() {
     log.info("getPermissionInfo");
     // 1.1 获得用户信息
     AdminUserDO user = userService.getUser(getLoginUserId());
@@ -68,7 +72,8 @@ public class AuthController {
     // 1.2 获得角色列表
     Set<Long> roleIds = permissionService.getUserRoleIdListByUserId(getLoginUserId());
     if (CollUtil.isEmpty(roleIds)) {
-      // todo
+      return success(
+          AuthConvert.INSTANCE.convert(user, Collections.emptyList(), Collections.emptyList()));
     }
 
     List<RoleDO> roles = roleService.getRoleList(roleIds);
@@ -80,6 +85,6 @@ public class AuthController {
     menuList.removeIf(menu -> !CommonStatusEnum.ENABLE.getStatus().equals(menu.getStatus()));
 
     // 2. 拼接结果返回
-    return success(null);
+    return success(AuthConvert.INSTANCE.convert(user, roles, menuList));
   }
 }

@@ -1,6 +1,7 @@
 package com.keer.yudaovue.framework.mybatis.core.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.github.yulichang.base.MPJBaseMapper;
@@ -24,5 +25,9 @@ public interface BaseMapperX<T> extends MPJBaseMapper<T> {
 
   default List<T> selectList(SFunction<T, ?> field, Object value) {
     return selectList(new LambdaQueryWrapper<T>().eq(field, value));
+  }
+
+  default List<T> selectList() {
+    return selectList(new QueryWrapper<>());
   }
 }

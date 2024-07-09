@@ -17,6 +17,8 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Security;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
@@ -55,6 +57,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         LoginUser loginUser = buildLoginUserByToken(token, userType);
         // 1.2 模拟 Login 功能，方便日常开发调试
         // todo
+
+        // 2. 设置当前用户
+        if(loginUser!=null){
+          SecurityFrameworkUtils.setLoginUser(loginUser,request);
+        }
       } catch (Throwable ex) {
         CommonResult<?> result = globalExceptionHandler.allExceptionHandler(request, ex);
         ServletUtils.writeJSON(response, result);

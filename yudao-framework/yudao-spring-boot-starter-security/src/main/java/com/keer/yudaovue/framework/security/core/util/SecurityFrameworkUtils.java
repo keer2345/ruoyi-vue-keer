@@ -3,14 +3,19 @@ package com.keer.yudaovue.framework.security.core.util;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.keer.yudaovue.framework.security.core.LoginUser;
+import com.keer.yudaovue.framework.web.core.util.WebFrameworkUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.Null;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
+
+import java.util.Collections;
 
 /**
  * 安全服务工具类
@@ -92,5 +97,31 @@ public class SecurityFrameworkUtils {
     // 2. 去除 Token 中带的 Bearer
     int index = token.indexOf(AUTHORIZATION_BEARER + " ");
     return index >= 0 ? token.substring(index + 7).trim() : token;
+  }
+
+  /**
+   * 设置当前用户
+   *
+   * @param loginUser
+   * @param request
+   */
+  public static void setLoginUser(LoginUser loginUser, HttpServletRequest request) {
+    // 创建 Authentication，并设置到上下文
+    Authentication authentication = buildAuthentication(loginUser, request);
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    // 额外设置到 request 中，用于 ApiAccessLogFilter 可以获取到用户编号；
+    // 原因是，Spring Security 的 Filter 在 ApiAccessLogFilter 后面，在它记录访问日志时，线上上下文已经没有用户编号等信息
+    WebFrameworkUtils.setLoginUserId(request,loginUser.getId());
+    WebFrameworkUtils.setLoginUserType(request,loginUser.getUserType());
+  }
+
+  private static Authentication buildAuthentication(
+      LoginUser loginUser, HttpServletRequest request) {
+    // 创建 UsernamePasswordAuthenticationToken 对象
+    UsernamePasswordAuthenticationToken authenticationToken =
+        new UsernamePasswordAuthenticationToken(loginUser, null, Collections.emptyList());
+    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+    return authenticationToken;
   }
 }

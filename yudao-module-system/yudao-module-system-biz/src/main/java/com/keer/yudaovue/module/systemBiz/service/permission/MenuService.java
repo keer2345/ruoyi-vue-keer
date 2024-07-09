@@ -20,4 +20,6 @@ public interface MenuService {
    * @return
    */
   List<MenuDO> getMenuList(Collection<Long> ids);
+
+  List<MenuDO> getMenuList();
 }

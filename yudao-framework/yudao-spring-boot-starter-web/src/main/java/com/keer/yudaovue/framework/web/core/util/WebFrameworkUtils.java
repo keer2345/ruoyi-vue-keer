@@ -97,4 +97,18 @@ public class WebFrameworkUtils {
         (ServletRequestAttributes) requestAttributes;
     return servletRequestAttributes.getRequest();
   }
+
+  public static void setLoginUserId(ServletRequest request, Long userId) {
+    request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_ID, userId);
+  }
+
+  /**
+   * 设置用户类型
+   *
+   * @param request
+   * @param userType
+   */
+  public static void setLoginUserType(HttpServletRequest request, Integer userType) {
+    request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_TYPE, userType);
+  }
 }
