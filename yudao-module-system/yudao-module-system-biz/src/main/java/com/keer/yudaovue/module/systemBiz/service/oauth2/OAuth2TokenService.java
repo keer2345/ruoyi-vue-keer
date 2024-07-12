@@ -46,4 +46,14 @@ public interface OAuth2TokenService {
    * @return
    */
   OAuth2AccessTokenDO checkAccessToken(String accessToken);
+
+  /**
+   * 移除访问令牌 注意：该流程中，会移除相关的刷新令牌
+   *
+   * <p>参考 DefaultTokenServices 的 revokeToken 方法
+   *
+   * @param accessToken
+   * @return
+   */
+  OAuth2AccessTokenDO removeAccessToken(String accessToken);
 }

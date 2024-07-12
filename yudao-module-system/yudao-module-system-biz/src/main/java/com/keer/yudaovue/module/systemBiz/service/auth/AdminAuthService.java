@@ -22,4 +22,12 @@ public interface AdminAuthService {
    * @return
    */
   AuthLoginRespVO login(@Valid AuthLoginReqVO reqVo);
+
+  /**
+   * 基于 token 退出登录
+   *
+   * @param token
+   * @param logoutType
+   */
+  void logout(String token, Integer logoutType);
 }

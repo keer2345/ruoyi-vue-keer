@@ -100,6 +100,18 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         user.getId(), reqVo.getUsername(), LoginLogTypeEnum.LOGIN_USERNAME);
   }
 
+  @Override
+  public void logout(String token, Integer logoutType) {
+    // 删除访问令牌
+    OAuth2AccessTokenDO accessTokenDO = oAuth2TokenService.removeAccessToken(token);
+
+    if (ObjUtil.isNull(accessTokenDO)) {
+      return;
+    }
+    // 删除成功，则记录登出日志
+    createLogoutLog(accessTokenDO.getUserId(), accessTokenDO.getUserType(), logoutType);
+  }
+
   private void createLoginLog(
       Long userId, String username, LoginLogTypeEnum logTypeEnum, LoginResultEnum loginResult) {
     // 插入登录日志
@@ -154,6 +166,33 @@ public class AdminAuthServiceImpl implements AdminAuthService {
           LoginResultEnum.CAPTCHA_CODE_ERROR);
       throw exception(AUTH_LOGIN_CAPTCHA_CODE_ERROR, response.getRepMsg());
     }
+  }
+
+  private void createLogoutLog(Long userId, Integer userType, Integer logoutType) {
+    LoginLogCreateReqDTO reqDTO = new LoginLogCreateReqDTO();
+    reqDTO
+        .setLogType(logoutType)
+        .setTraceId(TracerUtils.getTraceId())
+        .setUserId(userId)
+        .setUserType(userType);
+    if (ObjUtil.equals(getUserType().getValue(), userType)) {
+      reqDTO.setUsername(getUsername(userId));
+    } else {
+      // todo
+    }
+    reqDTO
+        .setUserAgent(ServletUtils.getUserAgent())
+        .setUserIp(ServletUtils.getClientIP())
+        .setResult(LoginResultEnum.SUCCESS.getResult());
+    loginLogService.createLoginLog(reqDTO);
+  }
+
+  private String getUsername(Long userId) {
+    if (ObjUtil.isNull(userId)) {
+      return null;
+    }
+    AdminUserDO user = userService.getUser(userId);
+    return ObjUtil.isNotNull(user) ? user.getUsername() : null;
   }
 
   private UserTypeEnum getUserType() {

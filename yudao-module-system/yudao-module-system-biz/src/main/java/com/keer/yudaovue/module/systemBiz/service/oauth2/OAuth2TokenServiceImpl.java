@@ -120,4 +120,20 @@ public class OAuth2TokenServiceImpl implements OAuth2TokenService {
     }
     return accessTokenDO;
   }
+
+  @Override
+  public OAuth2AccessTokenDO removeAccessToken(String accessToken) {
+    // 删除访问令牌
+    OAuth2AccessTokenDO accessTokenDO=oAuth2AccessTokenMapper.selectByAccessToken(accessToken);
+    if(ObjUtil.isNull(accessTokenDO)){
+      return null;
+    }
+    oAuth2AccessTokenMapper.deleteById(accessTokenDO.getId());
+    // todo redis
+
+    // 删除刷新令牌
+    oAuth2RefreshTokenMapper.deleteByRefreshToken(accessTokenDO.getRefreshToken());
+
+    return accessTokenDO;
+  }
 }

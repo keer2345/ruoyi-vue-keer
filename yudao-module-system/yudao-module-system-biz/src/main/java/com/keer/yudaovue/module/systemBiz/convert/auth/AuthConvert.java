@@ -55,7 +55,6 @@ public interface AuthConvert {
     if (CollUtil.isEmpty(menuList)) {
       return Collections.emptyList();
     }
-    System.out.println("buildMenuTree menuList: " + menuList);
     // 移除按钮
     menuList.removeIf(menu -> menu.getType().equals(MenuTypeEnum.BUTTON.getType()));
     // 排序，保证菜单的有序性
@@ -88,9 +87,7 @@ public interface AuthConvert {
               parentNode.getChildren().add(childNode);
             });
     // 获得到所有的根节点
-      List<AuthPermissionInfoRespVO.MenuVO> m =filterList(treeNodeMap.values(), node -> ID_ROOT.equals(node.getParentId()));
-      System.out.println("buildMenuTree m: " + m);
-      return m;
+      return filterList(treeNodeMap.values(), node -> ID_ROOT.equals(node.getParentId()));
   }
 
   AuthPermissionInfoRespVO.MenuVO convertTreeNode(MenuDO menu);

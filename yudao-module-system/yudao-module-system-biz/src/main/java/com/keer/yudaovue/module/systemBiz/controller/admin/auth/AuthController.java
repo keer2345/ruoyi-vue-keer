@@ -1,8 +1,12 @@
 package com.keer.yudaovue.module.systemBiz.controller.admin.auth;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.keer.yudaovue.framework.common.enums.CommonStatusEnum;
 import com.keer.yudaovue.framework.common.pojo.CommonResult;
+import com.keer.yudaovue.framework.security.config.SecurityProperties;
+import com.keer.yudaovue.framework.security.core.util.SecurityFrameworkUtils;
+import com.keer.yudaovue.module.systemApi.enums.logger.LoginLogTypeEnum;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginReqVO;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthLoginRespVO;
 import com.keer.yudaovue.module.systemBiz.controller.admin.auth.vo.AuthPermissionInfoRespVO;
@@ -19,6 +23,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.annotation.security.PermitAll;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
@@ -51,12 +56,26 @@ public class AuthController {
   @Resource private RoleService roleService;
   @Resource private MenuService menuService;
 
+  @Resource private SecurityProperties securityProperties;
+
   // todo
   @PostMapping("login")
   @PermitAll
   @Operation(summary = "使用账号密码登录")
   public CommonResult<AuthLoginRespVO> login(@RequestBody @Valid AuthLoginReqVO reqVo) {
     return success(authService.login(reqVo));
+  }
+
+  @PostMapping("logout")
+  @Operation(summary = "登出系统")
+  public CommonResult<Boolean> logout(HttpServletRequest request) {
+    String tokenh = securityProperties.getTokenHeader();
+    String tokenp = securityProperties.getTokenParameter();
+    String token = SecurityFrameworkUtils.obtainAuthorization(request, tokenh, tokenp);
+    if (StrUtil.isNotBlank(token)) {
+      authService.logout(token, LoginLogTypeEnum.LOGOUT_SELF.getType());
+    }
+    return success(true);
   }
 
   @GetMapping("get-permission-info")
